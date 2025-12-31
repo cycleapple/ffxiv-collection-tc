@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FFXIV Collections 查詢工具</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1 class="logo">FFXIV Collections</h1>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="搜尋收藏品..." autocomplete="off">
+                <div id="search-results" class="search-results"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Collection Tabs -->
+    <nav class="collection-tabs">
+        <div class="tabs-container" id="collection-tabs">
+            <!-- Tabs will be dynamically generated -->
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Sidebar Filters -->
+        <aside class="sidebar">
+            <div class="filter-section">
+                <h3>來源篩選</h3>
+                <div id="source-filters" class="filter-list">
+                    <!-- Source filters will be dynamically generated -->
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <h3>版本篩選</h3>
+                <div id="patch-filters" class="filter-list patch-filters">
+                    <!-- Patch filters will be dynamically generated -->
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <button id="clear-filters" class="clear-filters-btn">清除所有篩選</button>
+            </div>
+        </aside>
+
+        <!-- Items Grid -->
+        <section class="items-section">
+            <div class="items-header">
+                <span id="items-count">載入中...</span>
+                <div class="sort-options">
+                    <select id="sort-select">
+                        <option value="name">名稱排序</option>
+                        <option value="patch-desc">版本 (新→舊)</option>
+                        <option value="patch-asc">版本 (舊→新)</option>
+                        <option value="id">ID 排序</option>
+                    </select>
+                </div>
+            </div>
+            <div id="items-grid" class="items-grid">
+                <!-- Items will be dynamically generated -->
+            </div>
+            <div id="loading-indicator" class="loading">
+                <div class="spinner"></div>
+                <span>載入中...</span>
+            </div>
+        </section>
+    </main>
+
+    <!-- Item Detail Modal -->
+    <div id="item-modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close">&times;</button>
+            <div class="modal-body">
+                <div class="item-detail-header">
+                    <img id="modal-icon" class="item-detail-icon" src="" alt="">
+                    <div class="item-detail-info">
+                        <h2 id="modal-name"></h2>
+                        <span id="modal-patch" class="patch-badge"></span>
+                    </div>
+                </div>
+                <p id="modal-description" class="item-description"></p>
+
+                <div class="sources-section">
+                    <h3>取得來源</h3>
+                    <div id="modal-sources" class="sources-list">
+                        <!-- Sources will be dynamically generated -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/filters.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
