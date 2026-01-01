@@ -553,6 +553,13 @@ body {
     margin-bottom: 0.25rem;
 }
 
+.item-detail-badges {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
 .patch-badge {
     display: inline-block;
     padding: 2px 8px;
@@ -560,6 +567,27 @@ body {
     border-radius: 4px;
     font-size: 0.8rem;
     color: var(--text-secondary);
+}
+
+.wiki-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 10px;
+    background: #4a7c59;
+    color: white;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.wiki-link:hover {
+    background: #5a9c69;
+}
+
+.wiki-link svg {
+    flex-shrink: 0;
 }
 
 .item-description {

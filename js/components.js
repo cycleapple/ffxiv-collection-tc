@@ -49,6 +49,36 @@ const CURRENCY_ICONS = {
     '雙色寶石': 65071,
 };
 
+// Huiji Wiki URL mapping by collection type
+const HUIJI_COLLECTION_MAPPING = {
+    'Mounts': { key: 'mounts', urlPrefix: '' },
+    'Minions': { key: 'minions', urlPrefix: '' },
+    'Blue Mage': { key: 'actions', urlPrefix: '' },
+    'Triple Triad': { key: 'tripleTriad', urlPrefix: '' },
+    'Orchestrions': { key: 'orchestrions', urlPrefix: '' },
+    'Emotes': { key: 'emotes', urlPrefix: '' },
+    'Bardings': { key: 'bardings', urlPrefix: '' },
+    'Fashion Accessories': { key: 'fashionAccessories', urlPrefix: '' },
+    'Glasses': { key: 'glasses', urlPrefix: '' },
+    'Glamour': { key: 'items', urlPrefix: '物品:' },
+    'Framer Kits': { key: 'items', urlPrefix: '物品:' },
+    'Hairstyles': null, // Not supported - no names in data
+};
+
+// Get Huiji Wiki URL for an item
+function getHuijiWikiUrl(item, collectionName) {
+    if (!huijiMapping) return null;
+
+    const mapping = HUIJI_COLLECTION_MAPPING[collectionName];
+    if (!mapping) return null;
+
+    const scName = huijiMapping[mapping.key]?.[item.Id];
+    if (!scName) return null;
+
+    const urlPrefix = mapping.urlPrefix || '';
+    return `https://ff14.huijiwiki.com/wiki/${encodeURIComponent(urlPrefix + scName)}`;
+}
+
 // Create item card HTML
 function createItemCard(item) {
     const card = document.createElement('div');

@@ -5,6 +5,7 @@
 // Global state
 let collectionsData = null;
 let blueMageSources = null; // Blue Mage spell sources from thewakingsands
+let huijiMapping = null; // Huiji Wiki ID to SC name mapping
 let currentCollection = null;
 let filterState = new FilterState();
 let currentSort = 'name';
@@ -37,6 +38,7 @@ const elements = {
     modalPatch: null,
     modalDescription: null,
     modalSources: null,
+    modalWikiLink: null,
     loadingIndicator: null,
     loadMoreBtn: null,
     loadMoreContainer: null,
@@ -77,6 +79,7 @@ function cacheElements() {
     elements.modalPatch = document.getElementById('modal-patch');
     elements.modalDescription = document.getElementById('modal-description');
     elements.modalSources = document.getElementById('modal-sources');
+    elements.modalWikiLink = document.getElementById('modal-wiki-link');
     elements.loadingIndicator = document.getElementById('loading-indicator');
 
     // Create load more container dynamically
@@ -218,10 +221,11 @@ async function loadData() {
     showLoading(true);
 
     try {
-        // Load main collections data and Blue Mage sources in parallel
-        const [collectionsResponse, blueMageResponse] = await Promise.all([
+        // Load main collections data, Blue Mage sources, and Huiji mapping in parallel
+        const [collectionsResponse, blueMageResponse, huijiResponse] = await Promise.all([
             fetch('data/collections_data.json'),
-            fetch('data/bluemage_sources.json').catch(() => null)
+            fetch('data/bluemage_sources.json').catch(() => null),
+            fetch('data/huiji_mapping.json').catch(() => null)
         ]);
 
         if (!collectionsResponse.ok) {
@@ -239,6 +243,12 @@ async function loadData() {
                 blueMageSources[spell.action] = spell;
             }
             console.log('Blue Mage sources loaded:', Object.keys(blueMageSources).length, 'spells');
+        }
+
+        // Load Huiji Wiki mapping if available
+        if (huijiResponse && huijiResponse.ok) {
+            huijiMapping = await huijiResponse.json();
+            console.log('Huiji mapping loaded');
         }
     } catch (error) {
         console.error('Failed to load data:', error);
@@ -575,6 +585,15 @@ function showItemDetail(item) {
         }
     } else {
         elements.modalSources.innerHTML = '<p class="no-results">無來源資料</p>';
+    }
+
+    // Set wiki link
+    const wikiUrl = getHuijiWikiUrl(item, currentCollection);
+    if (wikiUrl && elements.modalWikiLink) {
+        elements.modalWikiLink.href = wikiUrl;
+        elements.modalWikiLink.style.display = '';
+    } else if (elements.modalWikiLink) {
+        elements.modalWikiLink.style.display = 'none';
     }
 
     elements.modal.classList.add('active');
