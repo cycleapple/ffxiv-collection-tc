@@ -97,6 +97,10 @@ function createItemCard(item) {
         <img src="${item.IconUrl}" alt="${item.Name}" loading="lazy" onerror="this.src='https://xivapi.com/i/000000/000000.png'">
         <div class="item-name">${item.Name || '???'}</div>
         <div class="item-patch">Patch ${patchDisplay}</div>
+        <label>
+            <input type="checkbox"  class="item-selected-button" data-item-id="${item.Id}" >
+            收藏
+        </label>
     `;
 
     return card;

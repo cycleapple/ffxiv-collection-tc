@@ -58,6 +58,9 @@ async function init() {
 
     // Render initial UI
     renderUI();
+
+    // 載入頁面時恢復勾選狀態
+    loadCheckboxStates();
 }
 
 // Cache DOM elements
@@ -96,13 +99,13 @@ function setupEventListeners() {
     });
 
     // Source filter clicks
-    elements.sourceFilters.addEventListener('click', (e) => {
-        const filterItem = e.target.closest('.filter-item');
-        if (filterItem) {
+    elements.sourceFilters.addEventListener('change', (e) => {
+        const input = e.target;
+        if (input.tagName === 'INPUT' && input.closest('.filter-item')) {
+            const filterItem = input.closest('.filter-item');
             const category = filterItem.dataset.category;
             filterState.toggleCategory(category);
-            filterItem.classList.toggle('active');
-            filterItem.querySelector('input').checked = filterState.activeCategories.has(category);
+            filterItem.classList.toggle('active', input.checked);
             renderItems();
         }
     });
@@ -212,6 +215,14 @@ function setupEventListeners() {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && elements.modal.classList.contains('active')) {
             closeModal();
+        }
+    });
+
+    // 監聽所有 checkbox 的變更
+    document.addEventListener('change', (e) => {
+        if (e.target.classList.contains('item-selected-button')) {
+            const itemId = e.target.dataset.itemId;
+            saveCheckboxState(itemId, e.target.checked);
         }
     });
 }
@@ -382,6 +393,30 @@ function renderItems() {
 
     // Render first batch
     renderMoreItems();
+}
+
+// 載入頁面時恢復勾選狀態
+function loadCheckboxStates() {
+    const savedStates = JSON.parse(localStorage.getItem('checkedItems') || '{}');
+    
+    document.querySelectorAll('.item-selected-button').forEach(checkbox => {
+        const itemId = checkbox.dataset.itemId;
+        checkbox.checked = savedStates[itemId] || false;
+    });
+}
+
+// 儲存勾選狀態
+function saveCheckboxState(itemId, isChecked) {
+    const savedStates = JSON.parse(localStorage.getItem('checkedItems') || '{}');
+    
+    if (isChecked) {
+        savedStates[itemId] = true;
+    } else {
+        delete savedStates[itemId];
+    }
+    
+    localStorage.setItem('checkedItems', JSON.stringify(savedStates));
+    console.log('11');
 }
 
 // Render more items (pagination)
