@@ -127,8 +127,8 @@ function renderSourceItem(source) {
         return renderShopSource(source);
     }
 
-    // Get icon based on source Type
-    let sourceIconId = SOURCE_TYPE_ICONS[sourceType] || 60414;
+    // Use source IconUrl if available, otherwise fall back to type-based icon
+    let sourceIconUrl = source.IconUrl || getIconUrl(SOURCE_TYPE_ICONS[sourceType] || 60414);
 
     let detailsHtml = '';
 
@@ -144,7 +144,7 @@ function renderSourceItem(source) {
 
     div.innerHTML = `
         <div class="source-header">
-            <img src="${getIconUrl(sourceIconId)}" alt="" onerror="this.style.display='none'">
+            <img src="${sourceIconUrl}" alt="" onerror="this.style.display='none'">
             <span class="source-name">${source.Name || '未知來源'}</span>
             <span class="source-type">${getSourceTypeName(sourceType)}</span>
         </div>
