@@ -246,11 +246,13 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
+    justify-content: center;
 }
 
 .patch-btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 4px;
     padding: 4px 10px;
     background: var(--bg-secondary);
@@ -266,10 +268,12 @@ body {
     width: 18px;
     height: 18px;
     object-fit: contain;
+    vertical-align: middle;
 }
 
 .patch-btn span {
     line-height: 1;
+    vertical-align: middle;
 }
 
 .patch-btn:hover {
