@@ -1,1 +1,5 @@
 node_modules/
+tools/
+data/*_cn.csv
+data/*_tc.csv
+data/*_mapping.json
