@@ -4,6 +4,7 @@
 
 // Global state
 let collectionsData = null;
+let blueMageSources = null; // Blue Mage spell sources from thewakingsands
 let currentCollection = null;
 let filterState = new FilterState();
 let currentSort = 'name';
@@ -203,12 +204,28 @@ async function loadData() {
     showLoading(true);
 
     try {
-        const response = await fetch('data/collections_data.json');
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
+        // Load main collections data and Blue Mage sources in parallel
+        const [collectionsResponse, blueMageResponse] = await Promise.all([
+            fetch('data/collections_data.json'),
+            fetch('data/bluemage_sources.json').catch(() => null)
+        ]);
+
+        if (!collectionsResponse.ok) {
+            throw new Error(`HTTP ${collectionsResponse.status}`);
         }
-        collectionsData = await response.json();
+        collectionsData = await collectionsResponse.json();
         console.log('Data loaded:', collectionsData.Collections.length, 'collections');
+
+        // Load Blue Mage sources if available
+        if (blueMageResponse && blueMageResponse.ok) {
+            const blueMageData = await blueMageResponse.json();
+            // Create a map by action ID for quick lookup
+            blueMageSources = {};
+            for (const spell of blueMageData) {
+                blueMageSources[spell.action] = spell;
+            }
+            console.log('Blue Mage sources loaded:', Object.keys(blueMageSources).length, 'spells');
+        }
     } catch (error) {
         console.error('Failed to load data:', error);
         elements.itemsGrid.innerHTML = `
@@ -394,7 +411,16 @@ function showItemDetail(item) {
     elements.modalIcon.onerror = function() {
         this.src = 'https://xivapi.com/i/000000/000000.png';
     };
-    elements.modalName.textContent = item.Name || '???';
+
+    // Check if this is a Blue Mage spell and get source data
+    const blueMageSpell = blueMageSources ? blueMageSources[item.Id] : null;
+
+    // Show spell number for Blue Mage
+    let displayName = item.Name || '???';
+    if (blueMageSpell) {
+        displayName = `No.${blueMageSpell.no} ${displayName}`;
+    }
+    elements.modalName.textContent = displayName;
 
     const patchDisplay = item.DisplayPatch || (item.PatchAdded >= 999 ? '未知' : item.PatchAdded.toString());
     elements.modalPatch.textContent = `Patch ${patchDisplay}`;
@@ -407,7 +433,13 @@ function showItemDetail(item) {
     // Render sources
     elements.modalSources.innerHTML = '';
 
-    if (item.Sources && item.Sources.length > 0) {
+    // Use Blue Mage sources if available
+    if (blueMageSpell && blueMageSpell.method && blueMageSpell.method.length > 0) {
+        for (const method of blueMageSpell.method) {
+            const sourceItem = renderBlueMageSource(method);
+            elements.modalSources.appendChild(sourceItem);
+        }
+    } else if (item.Sources && item.Sources.length > 0) {
         for (const source of item.Sources) {
             const sourceItem = renderSourceItem(source);
             elements.modalSources.appendChild(sourceItem);

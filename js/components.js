@@ -239,6 +239,73 @@ function getSourceTypeName(type) {
     return typeNames[type] || type;
 }
 
+// Blue Mage source type icons and translations
+const BLUEMAGE_SOURCE_TYPES = {
+    'dungeon': { name: '副本', icon: 60414 },
+    'trail': { name: '討伐', icon: 61804 },
+    'raid': { name: '大型任務', icon: 61802 },
+    'map': { name: '野外', icon: 60501 },
+    'fate': { name: 'FATE', icon: 60722 },
+    'special': { name: '特殊', icon: 61419 },
+    'masked': { name: '假面狂歡', icon: 61824 }
+};
+
+// Render Blue Mage source from thewakingsands data
+function renderBlueMageSource(method) {
+    const div = document.createElement('div');
+    div.className = 'source-item';
+
+    const typeInfo = BLUEMAGE_SOURCE_TYPES[method.type] || { name: method.type, icon: 60414 };
+    const iconUrl = getIconUrl(typeInfo.icon);
+
+    let locationText = '';
+    let mobText = '';
+
+    // Handle different method types
+    if (method.type === 'special') {
+        locationText = method.text || '特殊方式習得';
+    } else if (method.type === 'map') {
+        locationText = method.map || '';
+        if (method.rank) {
+            locationText += ` (${method.rank}級狩獵怪)`;
+        }
+        if (method.position && method.position.length >= 2) {
+            locationText += ` (${method.position[0]}, ${method.position[1]})`;
+        }
+    } else if (method.type === 'fate') {
+        locationText = method.map || '';
+        if (method.name) {
+            locationText += ` - ${method.name}`;
+        }
+    } else {
+        locationText = method.name || '';
+    }
+
+    if (method.mob) {
+        mobText = `怪物: ${method.mob}`;
+    }
+
+    let noteText = '';
+    if (method.note) {
+        noteText = `<div class="source-note">💡 ${method.note}</div>`;
+    }
+
+    div.innerHTML = `
+        <div class="source-header">
+            <img src="${iconUrl}" alt="" onerror="this.style.display='none'">
+            <span class="source-name">${locationText}</span>
+            <span class="source-type">${typeInfo.name}</span>
+        </div>
+        <div class="source-details">
+            ${mobText ? `<div>${mobText}</div>` : ''}
+            ${method.level ? `<div>Lv.${method.level}</div>` : ''}
+            ${noteText}
+        </div>
+    `;
+
+    return div;
+}
+
 // Render no results message
 function renderNoResults(container) {
     container.innerHTML = `

@@ -608,6 +608,12 @@ body {
     color: var(--warning);
 }
 
+.source-note {
+    color: var(--accent);
+    font-style: italic;
+    margin-top: 4px;
+}
+
 .source-cost {
     margin-top: 4px;
 }
