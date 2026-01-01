@@ -2952,5 +2952,532 @@
         "level": 70
       }
     ]
+  },
+  {
+    "no": 105,
+    "action": 34563,
+    "patch": "6.45",
+    "spell_ja": "ゴブリンパンチ",
+    "spell_en": "Goblin Punch",
+    "spell": "哥布林拳",
+    "level": 70,
+    "icon": "003358.png",
+    "icon_hr1": "003358_hr1.png",
+    "icon_book": "072306.png",
+    "icon_book_hr1": "072306_hr1.png",
+    "method": [
+      {
+        "type": "map",
+        "map": "珂露西亞島",
+        "rank": null,
+        "position": [
+          33,
+          33,
+          0
+        ],
+        "mob": "大哥布林",
+        "level": 70
+      },
+      {
+        "type": "map",
+        "map": "珂露西亞島",
+        "rank": null,
+        "position": [
+          37,
+          28,
+          0
+        ],
+        "mob": "大哥布林",
+        "level": 70
+      },
+      {
+        "type": "map",
+        "map": "珂露西亞島",
+        "rank": null,
+        "position": [
+          26,
+          10,
+          0
+        ],
+        "mob": "大哥布林守衛",
+        "level": 70
+      },
+      {
+        "type": "map",
+        "map": "珂露西亞島",
+        "rank": "A",
+        "position": [],
+        "mob": "小小殺手",
+        "level": 80
+      }
+    ]
+  },
+  {
+    "no": 106,
+    "action": 34564,
+    "patch": "6.45",
+    "spell_ja": "大回転",
+    "spell_en": "Right Round",
+    "spell": "大迴旋",
+    "level": 77,
+    "icon": "003359.png",
+    "icon_hr1": "003359_hr1.png",
+    "icon_book": "072307.png",
+    "icon_book_hr1": "072307_hr1.png",
+    "method": [
+      {
+        "type": "dungeon",
+        "name": "避暑離宮馬利卡大井",
+        "mob": "大犰狳",
+        "note": "BOSS #1",
+        "level": 77
+      }
+    ]
+  },
+  {
+    "no": 107,
+    "action": 34565,
+    "patch": "6.45",
+    "spell_ja": "スキルトロン",
+    "spell_en": "Schiltron",
+    "spell": "刺陣",
+    "level": 77,
+    "icon": "003360.png",
+    "icon_hr1": "003360_hr1.png",
+    "icon_book": "072308.png",
+    "icon_book_hr1": "072308_hr1.png",
+    "method": [
+      {
+        "type": "map",
+        "map": "安穆·艾蘭",
+        "rank": null,
+        "position": [
+          17,
+          30,
+          0
+        ],
+        "mob": "長尾犰狳",
+        "level": 77
+      },
+      {
+        "type": "map",
+        "map": "薩維奈島",
+        "rank": "B",
+        "position": [],
+        "mob": "金剛鳩摩羅",
+        "level": 90
+      }
+    ]
+  },
+  {
+    "no": 108,
+    "action": 34566,
+    "patch": "6.45",
+    "spell_ja": "補水",
+    "spell_en": "Rehydration",
+    "spell": "補水",
+    "level": 70,
+    "icon": "003361.png",
+    "icon_hr1": "003361_hr1.png",
+    "icon_book": "072309.png",
+    "icon_book_hr1": "072309_hr1.png",
+    "method": [
+      {
+        "type": "map",
+        "map": "安穆·艾蘭",
+        "rank": null,
+        "position": [
+          32,
+          9,
+          0
+        ],
+        "mob": "滑溜犰狳",
+        "level": 70
+      }
+    ]
+  },
+  {
+    "no": 109,
+    "action": 34567,
+    "patch": "6.45",
+    "spell_ja": "マジカルブレス",
+    "spell_en": "Breath Of Magic",
+    "spell": "魔法吐息",
+    "level": 80,
+    "icon": "003362.png",
+    "icon_hr1": "003362_hr1.png",
+    "icon_book": "072310.png",
+    "icon_book_hr1": "072310_hr1.png",
+    "method": [
+      {
+        "type": "special",
+        "text": "達到 80 級後可從[烏爾達哈來生迴廊]的[異男子嘎希迦]處獲得[天青圖騰]",
+        "level": 80
+      }
+    ]
+  },
+  {
+    "no": 110,
+    "action": 34568,
+    "patch": "6.45",
+    "spell_ja": "獣魂の怒り",
+    "spell_en": "Wild Rage",
+    "spell": "獸魂的憤怒",
+    "level": 80,
+    "icon": "003363.png",
+    "icon_hr1": "003363_hr1.png",
+    "icon_book": "072311.png",
+    "icon_book_hr1": "072311_hr1.png",
+    "method": [
+      {
+        "type": "dungeon",
+        "name": "漆黑決戰諾弗蘭特",
+        "mob": "幻光狂戰士",
+        "note": "BOSS #3",
+        "level": 80
+      }
+    ]
+  },
+  {
+    "no": 111,
+    "action": 34569,
+    "patch": "6.45",
+    "spell_ja": "泥団子遊び",
+    "spell_en": "Peat Pelt",
+    "spell": "玩泥球",
+    "level": 80,
+    "icon": "003364.png",
+    "icon_hr1": "003364_hr1.png",
+    "icon_book": "072312.png",
+    "icon_book_hr1": "072312_hr1.png",
+    "method": [
+      {
+        "type": "dungeon",
+        "name": "魔術工坊瑪托雅工作室",
+        "mob": "土泥人",
+        "note": "BOSS #1",
+        "level": 80
+      }
+    ]
+  },
+  {
+    "no": 112,
+    "action": 34570,
+    "patch": "6.45",
+    "spell_ja": "大掃除",
+    "spell_en": "Deep Clean",
+    "spell": "大掃除",
+    "level": 80,
+    "icon": "003365.png",
+    "icon_hr1": "003365_hr1.png",
+    "icon_book": "072313.png",
+    "icon_book_hr1": "072313_hr1.png",
+    "method": [
+      {
+        "type": "dungeon",
+        "name": "魔法宮殿宇宙宮",
+        "mob": "宮殿的隱者",
+        "note": "BOSS #1",
+        "level": 80
+      }
+    ]
+  },
+  {
+    "no": 113,
+    "action": 34571,
+    "patch": "6.45",
+    "spell_ja": "ルビーダイナモ",
+    "spell_en": "Ruby Dynamics",
+    "spell": "紅寶石電圈",
+    "level": 80,
+    "icon": "003366.png",
+    "icon_hr1": "003366_hr1.png",
+    "icon_book": "072314.png",
+    "icon_book_hr1": "072314_hr1.png",
+    "method": [
+      {
+        "type": "trail",
+        "name": "紅寶石神兵破壞作戰",
+        "mob": "紅寶石武器",
+        "level": 80
+      },
+      {
+        "type": "trail",
+        "name": "紅寶石神兵狂想作戰",
+        "mob": "紅寶石武器",
+        "level": 80
+      }
+    ]
+  },
+  {
+    "no": 114,
+    "action": 34572,
+    "patch": "6.45",
+    "spell_ja": "魔のルーン",
+    "spell_en": "Divination Rune",
+    "spell": "魔之符文",
+    "level": 73,
+    "icon": "003367.png",
+    "icon_hr1": "003367_hr1.png",
+    "icon_book": "072315.png",
+    "icon_book_hr1": "072315_hr1.png",
+    "method": [
+      {
+        "type": "trail",
+        "name": "緹坦妮雅殲滅戰",
+        "mob": "緹坦妮雅",
+        "level": 73
+      },
+      {
+        "type": "trail",
+        "name": "緹坦妮雅殲殛戰",
+        "mob": "緹坦妮雅",
+        "level": 80
+      }
+    ]
+  },
+  {
+    "no": 115,
+    "action": 34573,
+    "patch": "6.45",
+    "spell_ja": "ディメンションシフト",
+    "spell_en": "Dimensional Shift",
+    "spell": "空間轉換",
+    "level": 80,
+    "icon": "003368.png",
+    "icon_hr1": "003368_hr1.png",
+    "icon_book": "072316.png",
+    "icon_book_hr1": "072316_hr1.png",
+    "method": [
+      {
+        "type": "raid",
+        "name": "伊甸希望樂園 覺醒之章1",
+        "mob": "至尊伊甸",
+        "level": 80
+      },
+      {
+        "type": "raid",
+        "name": "伊甸零式希望樂園 覺醒之章1",
+        "mob": "至尊伊甸",
+        "level": 80
+      }
+    ]
+  },
+  {
+    "no": 116,
+    "action": 34574,
+    "patch": "6.45",
+    "spell_ja": "コンヴィクション・マルカート",
+    "spell_en": "Conviction Marcato",
+    "spell": "加強信音",
+    "level": 79,
+    "icon": "003369.png",
+    "icon_hr1": "003369_hr1.png",
+    "icon_book": "072317.png",
+    "icon_book_hr1": "072317_hr1.png",
+    "method": [
+      {
+        "type": "dungeon",
+        "name": "偽造天界格魯格火山",
+        "mob": "得到寬恕的猥褻",
+        "note": "BOSS #3",
+        "level": 79
+      }
+    ]
+  },
+  {
+    "no": 117,
+    "action": 34575,
+    "patch": "6.45",
+    "spell_ja": "フォースフィールド",
+    "spell_en": "Force Field",
+    "spell": "力場",
+    "level": 60,
+    "icon": "003370.png",
+    "icon_hr1": "003370_hr1.png",
+    "icon_book": "072318.png",
+    "icon_book_hr1": "072318_hr1.png",
+    "method": [
+      {
+        "type": "special",
+        "text": "學習 120 個技能後可從[烏爾達哈來生迴廊]的[異男子嘎希迦]處獲得[天青圖騰]",
+        "level": 80
+      },
+      {
+        "type": "trail",
+        "name": "薩菲洛特殲殛戰",
+        "mob": "賽菲羅特",
+        "level": 60
+      }
+    ]
+  },
+  {
+    "no": 118,
+    "action": 34576,
+    "patch": "6.45",
+    "spell_ja": "断罪の飛翔",
+    "spell_en": "Winged Reprobation",
+    "spell": "斷罪飛翔",
+    "level": 79,
+    "icon": "003371.png",
+    "icon_hr1": "003371_hr1.png",
+    "icon_book": "072319.png",
+    "icon_book_hr1": "072319_hr1.png",
+    "method": [
+      {
+        "type": "trail",
+        "name": "無瑕靈君殲滅戰",
+        "mob": "無瑕靈君",
+        "level": 79
+      },
+      {
+        "type": "trail",
+        "name": "無瑕靈君殲殛戰",
+        "mob": "無瑕靈君",
+        "level": 80
+      }
+    ]
+  },
+  {
+    "no": 119,
+    "action": 34577,
+    "patch": "6.45",
+    "spell_ja": "メーザーアイ",
+    "spell_en": "Laser Eye",
+    "spell": "激射眼",
+    "level": 80,
+    "icon": "003372.png",
+    "icon_hr1": "003372_hr1.png",
+    "icon_book": "072320.png",
+    "icon_book_hr1": "072320_hr1.png",
+    "method": [
+      {
+        "type": "raid",
+        "name": "伊甸希望樂園 再生之章4",
+        "mob": "伊甸之約",
+        "level": 80
+      },
+      {
+        "type": "raid",
+        "name": "伊甸零式希望樂園 再生之章4",
+        "mob": "伊甸之約",
+        "level": 80
+      }
+    ]
+  },
+  {
+    "no": 120,
+    "action": 34578,
+    "patch": "6.45",
+    "spell_ja": "キャンディケーン",
+    "spell_en": "Candy Cane",
+    "spell": "糖果手杖",
+    "level": 73,
+    "icon": "003373.png",
+    "icon_hr1": "003373_hr1.png",
+    "icon_book": "072321.png",
+    "icon_book_hr1": "072321_hr1.png",
+    "method": [
+      {
+        "type": "dungeon",
+        "name": "水妖幻園多恩美格禁園",
+        "mob": "美眼 因克·佐恩",
+        "note": "BOSS #1",
+        "level": 73
+      }
+    ]
+  },
+  {
+    "no": 121,
+    "action": 34579,
+    "patch": "6.45",
+    "spell_ja": "必滅の炎",
+    "spell_en": "Mortal Flame",
+    "spell": "必滅之炎",
+    "level": 80,
+    "icon": "003374.png",
+    "icon_hr1": "003374_hr1.png",
+    "icon_book": "072322.png",
+    "icon_book_hr1": "072322_hr1.png",
+    "method": [
+      {
+        "type": "dungeon",
+        "name": "魔法宮殿宇宙宮",
+        "mob": "盧格斯",
+        "note": "BOSS #3",
+        "level": 80
+      }
+    ]
+  },
+  {
+    "no": 122,
+    "action": 34580,
+    "patch": "6.45",
+    "spell_ja": "グルグルザパーン",
+    "spell_en": "Sea Shanty",
+    "spell": "咕嚕咕嚕",
+    "level": 80,
+    "icon": "003375.png",
+    "icon_hr1": "003375_hr1.png",
+    "icon_book": "072323.png",
+    "icon_book_hr1": "072323_hr1.png",
+    "method": [
+      {
+        "type": "dungeon",
+        "name": "魔術工坊瑪托雅工作室",
+        "mob": "水滴精",
+        "note": "BOSS #2",
+        "level": 80
+      }
+    ]
+  },
+  {
+    "no": 123,
+    "action": 34581,
+    "patch": "6.45",
+    "spell_ja": "アポカリュプシス",
+    "spell_en": "Apokalypsis",
+    "spell": "默示錄",
+    "level": 80,
+    "icon": "003376.png",
+    "icon_hr1": "003376_hr1.png",
+    "icon_book": "072324.png",
+    "icon_book_hr1": "072324_hr1.png",
+    "method": [
+      {
+        "type": "dungeon",
+        "name": "末日暗影亞馬烏羅提",
+        "mob": "至大災獸",
+        "note": "BOSS #3",
+        "level": 80
+      }
+    ]
+  },
+  {
+    "no": 124,
+    "action": 34582,
+    "patch": "6.45",
+    "spell_ja": "死すべき定め",
+    "spell_en": "Being Mortal",
+    "spell": "終有一死",
+    "level": 73,
+    "icon": "003377.png",
+    "icon_hr1": "003377_hr1.png",
+    "icon_book": "072325.png",
+    "icon_book_hr1": "072325_hr1.png",
+    "method": [
+      {
+        "type": "trail",
+        "name": "緹坦妮雅殲滅戰",
+        "mob": "緹坦妮雅",
+        "level": 73
+      },
+      {
+        "type": "trail",
+        "name": "緹坦妮雅殲殛戰",
+        "mob": "緹坦妮雅",
+        "level": 80
+      }
+    ]
   }
 ]
