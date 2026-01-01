@@ -11,7 +11,7 @@ const SOURCE_CATEGORIES = {
     PvP: { name: 'PvP', iconId: 61806 },
     Duty: { name: '副本', iconId: 60414 },
     Quest: { name: '任務', iconId: 61419 },
-    Event: { name: '活動', iconId: 60073 },
+    Event: { name: '活動', iconId: 61757 },
     Tomestones: { name: '神典石', iconId: 65086 },
     DeepDungeon: { name: '深層迷宮', iconId: 61824 },
     BeastTribes: { name: '蠻族', iconId: 65016 },
