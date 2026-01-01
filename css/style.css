@@ -407,6 +407,11 @@ body {
     border: 1px solid transparent;
 }
 
+.item-card:has(.item-selected-button:checked) {
+    border-color: var(--accent);
+    box-shadow: 0 0 8px rgba(92, 110, 142, 0.6);
+}
+
 .item-card:hover {
     background: var(--bg-card-hover);
     border-color: var(--accent);
@@ -436,6 +441,17 @@ body {
     font-size: 0.7rem;
     color: var(--text-muted);
     margin-top: 4px;
+}
+
+.item-selected-label {
+    padding: 4px 8px;
+    margin-top: 4px;
+    display: inline-block;
+    width: 100%;
+    background: var(--bg-secondary);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
 }
 
 /* Loading */
@@ -641,6 +657,7 @@ body {
     font-size: 0.8rem;
     color: var(--accent);
     margin-left: auto;
+    flex: none;
 }
 
 .source-wiki-link {

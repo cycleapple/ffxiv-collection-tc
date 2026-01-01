@@ -193,6 +193,11 @@ function setupEventListeners() {
 
     // Item card clicks
     elements.itemsGrid.addEventListener('click', (e) => {
+        // 排除 checkbox 和 label 的點擊
+        if (e.target.classList.contains('item-selected-button') || 
+            e.target.classList.contains('item-selected-label')) {
+            return;
+        }
         const card = e.target.closest('.item-card');
         if (card) {
             const itemId = parseInt(card.dataset.itemId);
@@ -395,7 +400,7 @@ function renderItems() {
     renderMoreItems();
 }
 
-// 載入頁面時恢復勾選狀態
+// Load checkbox states on page load
 function loadCheckboxStates() {
     const savedStates = JSON.parse(localStorage.getItem('checkedItems') || '{}');
     
@@ -405,18 +410,19 @@ function loadCheckboxStates() {
     });
 }
 
-// 儲存勾選狀態
+// Save check status
 function saveCheckboxState(itemId, isChecked) {
     const savedStates = JSON.parse(localStorage.getItem('checkedItems') || '{}');
     
     if (isChecked) {
         savedStates[itemId] = true;
+        document.querySelector(`.item-selected-button[data-item-id="${itemId}"]`).nextSibling.textContent = '已收藏';
     } else {
         delete savedStates[itemId];
+        document.querySelector(`.item-selected-button[data-item-id="${itemId}"]`).nextSibling.textContent = '收藏';
     }
     
     localStorage.setItem('checkedItems', JSON.stringify(savedStates));
-    console.log('11');
 }
 
 // Render more items (pagination)

@@ -90,16 +90,21 @@ function createItemCard(item) {
     const card = document.createElement('div');
     card.className = 'item-card';
     card.dataset.itemId = item.Id;
-
+    // 讀取勾選狀態
+    const savedStates = JSON.parse(localStorage.getItem('checkedItems') || '{}');
+    const isChecked = savedStates[item.Id] || false;
     const patchDisplay = item.DisplayPatch || (item.PatchAdded >= 999 ? '未知' : item.PatchAdded.toString());
 
     card.innerHTML = `
         <img src="${item.IconUrl}" alt="${item.Name}" loading="lazy" onerror="this.src='https://xivapi.com/i/000000/000000.png'">
         <div class="item-name">${item.Name || '???'}</div>
         <div class="item-patch">Patch ${patchDisplay}</div>
-        <label>
-            <input type="checkbox"  class="item-selected-button" data-item-id="${item.Id}" >
-            收藏
+        <label class="item-selected-label">
+            <input type="checkbox" 
+                class="item-selected-button" 
+                data-item-id="${item.Id}"
+                ${isChecked ? 'checked' : ''} hidden>
+            ${isChecked ? '已收藏' : '收藏'}
         </label>
     `;
 
