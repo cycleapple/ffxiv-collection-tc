@@ -127,6 +127,34 @@ function createTabButton(collection, isActive) {
     return btn;
 }
 
+// Show About page
+function showAboutPage() {
+    // Hide sidebar
+    document.querySelector('.sidebar').style.display = 'none';
+
+    // Update header
+    document.getElementById('items-count').textContent = '關於本站';
+
+    // Hide sort options
+    document.querySelector('.sort-options').style.display = 'none';
+
+    // Show about content
+    const grid = document.getElementById('items-grid');
+    grid.innerHTML = `
+        <div class="about-page">
+            <h2>FFXIV 繁體中文收藏查詢站</h2>
+            <div class="about-links">
+                <a href="https://discord.gg/X556xjySDG" target="_blank" rel="noopener">
+                    加入 Discord 社群
+                </a>
+                <a href="https://portaly.cc/thecy" target="_blank" rel="noopener">
+                    ☕ 支持作者
+                </a>
+            </div>
+        </div>
+    `;
+}
+
 // Create source filter item
 function createSourceFilterItem(categoryKey, categoryInfo, isActive) {
     const item = document.createElement('label');

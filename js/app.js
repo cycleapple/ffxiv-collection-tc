@@ -279,6 +279,13 @@ function renderUI() {
         elements.tabsContainer.appendChild(btn);
     });
 
+    // Add "About" tab
+    const aboutBtn = document.createElement('button');
+    aboutBtn.className = 'tab-btn';
+    aboutBtn.dataset.collection = 'about';
+    aboutBtn.textContent = '關於';
+    elements.tabsContainer.appendChild(aboutBtn);
+
     // Set initial collection
     if (sortedCollections.length > 0) {
         currentCollection = sortedCollections[0].CollectionName;
@@ -339,6 +346,21 @@ function updateFilterUI() {
 // Switch to a different collection
 function switchCollection(collectionName) {
     if (currentCollection === collectionName) return;
+
+    // Handle "About" page specially
+    if (collectionName === 'about') {
+        currentCollection = 'about';
+        showAboutPage();
+        // Update tab UI
+        elements.tabsContainer.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.collection === 'about');
+        });
+        return;
+    }
+
+    // Restore sidebar and sort options when switching to a regular collection
+    document.querySelector('.sidebar').style.display = '';
+    document.querySelector('.sort-options').style.display = '';
 
     currentCollection = collectionName;
 

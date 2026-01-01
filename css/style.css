@@ -854,3 +854,36 @@ body {
     font-size: 0.85rem;
     color: var(--text-muted);
 }
+
+/* About Page */
+.about-page {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.about-page h2 {
+    margin-bottom: 30px;
+    color: var(--text-primary);
+}
+
+.about-links {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+}
+
+.about-links a {
+    padding: 12px 24px;
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.about-links a:hover {
+    background: var(--bg-card-hover);
+    color: var(--text-primary);
+}
