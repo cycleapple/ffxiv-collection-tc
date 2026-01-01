@@ -115,6 +115,30 @@ function createSearchResultItem(item, collectionName) {
     return div;
 }
 
+// Clean FFXIV special characters (Private Use Area Unicode) from text
+function cleanFFXIVText(text) {
+    if (!text) return text;
+    // Remove FFXIV special icon characters (U+E000 to U+F8FF Private Use Area)
+    return text.replace(/[\uE000-\uF8FF]/g, '').trim();
+}
+
+// Translate source names to Traditional Chinese
+function translateSourceName(name, type) {
+    if (!name) return '未知來源';
+
+    // Direct translations
+    if (name === 'Mog Station Item') return '水晶商城';
+    if (name === 'Craftable') return '製作';
+
+    // Partial translations
+    if (name.includes('Subaquatic Voyages')) {
+        return name.replace('Subaquatic Voyages', '遠航探索');
+    }
+
+    // Clean FFXIV special characters
+    return cleanFFXIVText(name);
+}
+
 // Render source in modal
 function renderSourceItem(source) {
     const div = document.createElement('div');
@@ -127,8 +151,13 @@ function renderSourceItem(source) {
         return renderShopSource(source);
     }
 
-    // Use source IconUrl if available, otherwise fall back to type-based icon
-    let sourceIconUrl = source.IconUrl || getIconUrl(SOURCE_TYPE_ICONS[sourceType] || 60414);
+    // For Container type, use a unified treasure chest icon instead of item icons
+    let sourceIconUrl;
+    if (sourceType === 'Container') {
+        sourceIconUrl = getIconUrl(60465); // Treasure chest icon
+    } else {
+        sourceIconUrl = source.IconUrl || getIconUrl(SOURCE_TYPE_ICONS[sourceType] || 60414);
+    }
 
     let detailsHtml = '';
 
@@ -142,10 +171,12 @@ function renderSourceItem(source) {
         detailsHtml += `<div>NPC: ${source.NpcName}</div>`;
     }
 
+    const displayName = translateSourceName(source.Name, sourceType);
+
     div.innerHTML = `
         <div class="source-header">
             <img src="${sourceIconUrl}" alt="" onerror="this.style.display='none'">
-            <span class="source-name">${source.Name || '未知來源'}</span>
+            <span class="source-name">${displayName}</span>
             <span class="source-type">${getSourceTypeName(sourceType)}</span>
         </div>
         ${detailsHtml ? `<div class="source-details">${detailsHtml}</div>` : ''}
