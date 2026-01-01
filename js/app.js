@@ -399,8 +399,9 @@ function showItemDetail(item) {
     const patchDisplay = item.DisplayPatch || (item.PatchAdded >= 999 ? '未知' : item.PatchAdded.toString());
     elements.modalPatch.textContent = `Patch ${patchDisplay}`;
 
-    // Convert <br> tags to newlines for proper display
-    const description = (item.Description || '').replace(/<br\s*\/?>/gi, '\n');
+    // Clean FFXIV formatting tags and convert <br> to newlines
+    let description = (item.Description || '').replace(/<br\s*\/?>/gi, '\n');
+    description = cleanFFXIVText(description);
     elements.modalDescription.textContent = description;
 
     // Render sources

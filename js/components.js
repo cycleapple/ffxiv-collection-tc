@@ -115,11 +115,14 @@ function createSearchResultItem(item, collectionName) {
     return div;
 }
 
-// Clean FFXIV special characters (Private Use Area Unicode) from text
+// Clean FFXIV special characters and formatting tags from text
 function cleanFFXIVText(text) {
     if (!text) return text;
     // Remove FFXIV special icon characters (U+E000 to U+F8FF Private Use Area)
-    return text.replace(/[\uE000-\uF8FF]/g, '').trim();
+    let cleaned = text.replace(/[\uE000-\uF8FF]/g, '');
+    // Remove FFXIV formatting tags like <colortype(504)>, <edgecolortype(505)>, etc.
+    cleaned = cleaned.replace(/<\/?[a-zA-Z]+(\([^)]*\))?>/g, '');
+    return cleaned.trim();
 }
 
 // Translate source names to Traditional Chinese
