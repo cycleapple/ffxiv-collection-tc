@@ -17,6 +17,7 @@ const SOURCE_CATEGORIES = {
     BeastTribes: { name: '蠻族', iconId: 65016 },
     MogStation: { name: '商城', iconId: 61831 },
     Achievement: { name: '成就', iconId: 6 },
+    AchievementCertificate: { name: '成就幣', iconId: 65033 },
     CompanySeals: { name: '軍票', iconId: 65005 },
     IslandSanctuary: { name: '無人島', iconId: 65096 },
     HuntSeals: { name: '狩獵', iconId: 65034 },
