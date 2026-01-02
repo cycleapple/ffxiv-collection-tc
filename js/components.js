@@ -288,7 +288,7 @@ function showAboutPage() {
 
 // Create source filter item
 function createSourceFilterItem(categoryKey, categoryInfo, isActive) {
-    const item = document.createElement('label');
+    const item = document.createElement('div');
     item.className = `filter-item${isActive ? ' active' : ''}`;
     item.dataset.category = categoryKey;
 
