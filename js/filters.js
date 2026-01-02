@@ -17,7 +17,7 @@ const SOURCE_CATEGORIES = {
     BeastTribes: { name: '蠻族', iconId: 65016 },
     MogStation: { name: '商城', iconId: 61831 },
     Achievement: { name: '成就', iconId: 6 },
-    AchievementCertificate: { name: '成就幣', iconId: 65033 },
+    AchievementCertificate: { name: '成就幣', iconId: 65059 },
     CompanySeals: { name: '軍票', iconId: 65005 },
     IslandSanctuary: { name: '無人島', iconId: 65096 },
     HuntSeals: { name: '狩獵', iconId: 65034 },
@@ -205,9 +205,19 @@ class FilterState {
 
             let categoryMatch = false;
             for (const source of item.Sources) {
+                // Check explicit categories
                 if (source.Categories) {
                     for (const cat of source.Categories) {
                         if (this.activeCategories.has(cat)) {
+                            categoryMatch = true;
+                            break;
+                        }
+                    }
+                }
+                // Check for Achievement Certificate in costs (special case - not in Categories)
+                if (!categoryMatch && this.activeCategories.has('AchievementCertificate') && source.Costs) {
+                    for (const cost of source.Costs) {
+                        if (cost.ItemName === '成就幣') {
                             categoryMatch = true;
                             break;
                         }
