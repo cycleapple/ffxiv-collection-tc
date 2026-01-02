@@ -44,6 +44,18 @@ function getIconUrl(iconId) {
     return `https://xivapi.com/i/${folderStr}/${iconStr}.png`;
 }
 
+// Owned items localStorage management
+function loadOwnedItems(collectionName) {
+    const key = `ffxiv-owned-${collectionName}`;
+    const data = localStorage.getItem(key);
+    return data ? new Set(JSON.parse(data)) : new Set();
+}
+
+function saveOwnedItems(collectionName, ownedSet) {
+    const key = `ffxiv-owned-${collectionName}`;
+    localStorage.setItem(key, JSON.stringify([...ownedSet]));
+}
+
 // Filter state management
 class FilterState {
     constructor() {
@@ -51,11 +63,35 @@ class FilterState {
         this.activePatches = new Set();
         this.searchQuery = '';
         this.showNoSource = false; // 預設隱藏無來源項目
+        this.ownershipFilter = 'all'; // 'all' | 'owned' | 'not-owned'
     }
 
     toggleShowNoSource() {
         this.showNoSource = !this.showNoSource;
         return this.showNoSource;
+    }
+
+    setOwnershipFilter(value) {
+        this.ownershipFilter = value;
+        this.saveSettings();
+    }
+
+    saveSettings() {
+        localStorage.setItem('ffxiv-filter-settings', JSON.stringify({
+            ownershipFilter: this.ownershipFilter
+        }));
+    }
+
+    loadSettings() {
+        const data = localStorage.getItem('ffxiv-filter-settings');
+        if (data) {
+            try {
+                const settings = JSON.parse(data);
+                this.ownershipFilter = settings.ownershipFilter || 'all';
+            } catch (e) {
+                // Ignore invalid data
+            }
+        }
     }
 
     toggleCategory(category) {
@@ -93,8 +129,21 @@ class FilterState {
 
     /**
      * Check if an item passes all active filters
+     * @param {Object} item - The item to check
+     * @param {Function} isOwnedFn - Optional function to check if item is owned
      */
-    passesFilters(item) {
+    passesFilters(item, isOwnedFn) {
+        // Ownership filter
+        if (this.ownershipFilter !== 'all' && isOwnedFn) {
+            const isOwned = isOwnedFn(item.Id);
+            if (this.ownershipFilter === 'owned' && !isOwned) {
+                return false;
+            }
+            if (this.ownershipFilter === 'not-owned' && isOwned) {
+                return false;
+            }
+        }
+
         // No source filter - hide items without sources by default
         if (!this.showNoSource && (!item.Sources || item.Sources.length === 0)) {
             return false;

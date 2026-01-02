@@ -46,6 +46,24 @@
         <!-- Sidebar Filters -->
         <aside class="sidebar">
             <div class="filter-section">
+                <h3>擁有狀態</h3>
+                <div class="ownership-filter">
+                    <label class="radio-item">
+                        <input type="radio" name="ownership" value="all" checked>
+                        <span>全部</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="ownership" value="owned">
+                        <span>已擁有</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="ownership" value="not-owned">
+                        <span>未擁有</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="filter-section">
                 <h3>來源篩選</h3>
                 <div id="source-filters" class="filter-list">
                     <!-- Source filters will be dynamically generated -->
@@ -106,6 +124,12 @@
                         <h2 id="modal-name"></h2>
                         <div class="item-detail-badges">
                             <span id="modal-patch" class="patch-badge"></span>
+                            <button id="modal-owned-btn" class="owned-btn">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <span>標記為已擁有</span>
+                            </button>
                             <a id="modal-wiki-link" class="wiki-link" href="#" target="_blank" rel="noopener">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>

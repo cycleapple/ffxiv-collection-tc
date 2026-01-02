@@ -87,13 +87,21 @@ function getHuijiWikiUrl(item, collectionName) {
 
 // Create item card HTML
 function createItemCard(item) {
+    const isOwned = isItemOwned(item.Id);
     const card = document.createElement('div');
-    card.className = 'item-card';
+    card.className = `item-card${isOwned ? ' owned' : ''}`;
     card.dataset.itemId = item.Id;
 
     const patchDisplay = item.DisplayPatch || (item.PatchAdded >= 999 ? '未知' : item.PatchAdded.toString());
 
     card.innerHTML = `
+        <button class="owned-toggle${isOwned ? ' active' : ''}"
+                data-item-id="${item.Id}"
+                title="${isOwned ? '取消擁有' : '標記為已擁有'}">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+        </button>
         <img src="${item.IconUrl}" alt="${item.Name}" loading="lazy" onerror="this.src='https://xivapi.com/i/000000/000000.png'">
         <div class="item-name">${item.Name || '???'}</div>
         <div class="item-patch">Patch ${patchDisplay}</div>

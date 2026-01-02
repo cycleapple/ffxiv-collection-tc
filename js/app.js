@@ -19,6 +19,39 @@ let isLoadingMore = false;
 let infiniteScrollObserver = null;
 let currentCollectionData = null;
 
+// Owned items state
+let ownedItems = new Set();
+
+// Check if an item is owned
+function isItemOwned(itemId) {
+    return ownedItems.has(itemId);
+}
+
+// Toggle item owned status
+function toggleItemOwned(itemId) {
+    if (ownedItems.has(itemId)) {
+        ownedItems.delete(itemId);
+    } else {
+        ownedItems.add(itemId);
+    }
+    saveOwnedItems(currentCollection, ownedItems);
+}
+
+// Update card UI after owned status change
+function updateCardOwnedState(toggleBtn, itemId) {
+    const isOwned = ownedItems.has(itemId);
+    const card = toggleBtn.closest('.item-card');
+
+    toggleBtn.classList.toggle('active', isOwned);
+    toggleBtn.title = isOwned ? '取消擁有' : '標記為已擁有';
+    card.classList.toggle('owned', isOwned);
+
+    // If filtering by ownership, may need to hide/show this card
+    if (filterState.ownershipFilter !== 'all') {
+        renderItems();
+    }
+}
+
 // DOM Elements
 const elements = {
     tabsContainer: null,
@@ -39,6 +72,7 @@ const elements = {
     modalDescription: null,
     modalSources: null,
     modalWikiLink: null,
+    modalOwnedBtn: null,
     loadingIndicator: null,
     loadMoreBtn: null,
     loadMoreContainer: null,
@@ -50,6 +84,9 @@ async function init() {
     // Cache DOM elements
     cacheElements();
 
+    // Load saved filter settings
+    filterState.loadSettings();
+
     // Set up event listeners
     setupEventListeners();
 
@@ -58,6 +95,17 @@ async function init() {
 
     // Render initial UI
     renderUI();
+
+    // Update ownership filter UI to match loaded settings
+    updateOwnershipFilterUI();
+}
+
+// Update ownership filter radio buttons to match current state
+function updateOwnershipFilterUI() {
+    const radios = document.querySelectorAll('input[name="ownership"]');
+    radios.forEach(radio => {
+        radio.checked = radio.value === filterState.ownershipFilter;
+    });
 }
 
 // Cache DOM elements
@@ -80,6 +128,7 @@ function cacheElements() {
     elements.modalDescription = document.getElementById('modal-description');
     elements.modalSources = document.getElementById('modal-sources');
     elements.modalWikiLink = document.getElementById('modal-wiki-link');
+    elements.modalOwnedBtn = document.getElementById('modal-owned-btn');
     elements.loadingIndicator = document.getElementById('loading-indicator');
 
     // Create load more container dynamically
@@ -190,6 +239,17 @@ function setupEventListeners() {
 
     // Item card clicks
     elements.itemsGrid.addEventListener('click', (e) => {
+        // Handle owned toggle click
+        const toggleBtn = e.target.closest('.owned-toggle');
+        if (toggleBtn) {
+            e.stopPropagation();
+            const itemId = parseInt(toggleBtn.dataset.itemId);
+            toggleItemOwned(itemId);
+            updateCardOwnedState(toggleBtn, itemId);
+            return;
+        }
+
+        // Handle regular card click
         const card = e.target.closest('.item-card');
         if (card) {
             const itemId = parseInt(card.dataset.itemId);
@@ -200,11 +260,33 @@ function setupEventListeners() {
         }
     });
 
+    // Ownership filter change
+    document.querySelectorAll('input[name="ownership"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            filterState.setOwnershipFilter(e.target.value);
+            renderItems();
+        });
+    });
+
     // Modal close
     elements.modalClose.addEventListener('click', closeModal);
     elements.modal.addEventListener('click', (e) => {
         if (e.target === elements.modal) {
             closeModal();
+        }
+    });
+
+    // Modal owned button click
+    elements.modalOwnedBtn.addEventListener('click', () => {
+        const itemId = parseInt(elements.modalOwnedBtn.dataset.itemId);
+        if (!isNaN(itemId)) {
+            toggleItemOwned(itemId);
+            updateModalOwnedState(itemId);
+            // Also update the card in the grid if visible
+            const cardToggle = document.querySelector(`.owned-toggle[data-item-id="${itemId}"]`);
+            if (cardToggle) {
+                updateCardOwnedState(cardToggle, itemId);
+            }
         }
     });
 
@@ -214,6 +296,13 @@ function setupEventListeners() {
             closeModal();
         }
     });
+}
+
+// Update modal owned button state
+function updateModalOwnedState(itemId) {
+    const isOwned = ownedItems.has(itemId);
+    elements.modalOwnedBtn.classList.toggle('active', isOwned);
+    elements.modalOwnedBtn.querySelector('span').textContent = isOwned ? '已擁有' : '標記為已擁有';
 }
 
 // Load JSON data
@@ -289,6 +378,8 @@ function renderUI() {
     // Set initial collection
     if (sortedCollections.length > 0) {
         currentCollection = sortedCollections[0].CollectionName;
+        // Load owned items for initial collection
+        ownedItems = loadOwnedItems(currentCollection);
     }
 
     // Render source filters
@@ -364,6 +455,9 @@ function switchCollection(collectionName) {
 
     currentCollection = collectionName;
 
+    // Load owned items for this collection
+    ownedItems = loadOwnedItems(collectionName);
+
     // Update tab UI
     elements.tabsContainer.querySelectorAll('.tab-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.collection === collectionName);
@@ -381,7 +475,7 @@ function renderItems() {
     if (!currentCollectionData) return;
 
     // Filter items
-    currentFilteredItems = currentCollectionData.Items.filter(item => filterState.passesFilters(item));
+    currentFilteredItems = currentCollectionData.Items.filter(item => filterState.passesFilters(item, isItemOwned));
 
     // Sort items
     const sortFn = SORT_FUNCTIONS[currentSort] || SORT_FUNCTIONS['name'];
@@ -617,6 +711,10 @@ function showItemDetail(item) {
     } else if (elements.modalWikiLink) {
         elements.modalWikiLink.style.display = 'none';
     }
+
+    // Set owned button state
+    elements.modalOwnedBtn.dataset.itemId = item.Id;
+    updateModalOwnedState(item.Id);
 
     elements.modal.classList.add('active');
     document.body.style.overflow = 'hidden';
