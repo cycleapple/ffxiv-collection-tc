@@ -86,12 +86,13 @@ function getHuijiWikiUrl(item, collectionName) {
 }
 
 // Create item card HTML
-function createItemCard(item) {
+function createItemCard(item, index) {
     const isOwned = isItemOwned(item.Id);
     const isWishlisted = isItemInWishlist(currentCollection, item.Id);
     const card = document.createElement('div');
     card.className = `item-card${isOwned ? ' owned' : ''}${isWishlisted ? ' wishlisted' : ''}`;
     card.dataset.itemId = item.Id;
+    card.dataset.itemIndex = index;
 
     const patchDisplay = item.DisplayPatch || (item.PatchAdded >= 999 ? '未知' : item.PatchAdded.toString());
 

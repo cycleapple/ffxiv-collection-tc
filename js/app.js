@@ -328,10 +328,20 @@ function setupEventListeners() {
         // Handle regular card click
         const card = e.target.closest('.item-card');
         if (card) {
-            const itemId = parseInt(card.dataset.itemId);
-            // For wishlist items, use the stored collection name
-            const collectionName = card.dataset.collection || currentCollection;
-            const item = findItemById(itemId, collectionName);
+            let item = null;
+            let collectionName = currentCollection;
+
+            // For wishlist items, use the stored collection name and find by ID
+            if (card.dataset.collection) {
+                collectionName = card.dataset.collection;
+                const itemId = parseInt(card.dataset.itemId);
+                item = findItemById(itemId, collectionName);
+            } else if (card.dataset.itemIndex !== undefined) {
+                // For regular items, use the index to get exact item
+                const itemIndex = parseInt(card.dataset.itemIndex);
+                item = currentFilteredItems[itemIndex];
+            }
+
             if (item) {
                 // Temporarily set currentCollection for modal functions
                 const previousCollection = currentCollection;
@@ -631,7 +641,7 @@ function renderMoreItems() {
     // Use document fragment for better performance
     const fragment = document.createDocumentFragment();
     for (let i = startIndex; i < endIndex; i++) {
-        const card = createItemCard(currentFilteredItems[i]);
+        const card = createItemCard(currentFilteredItems[i], i);
         fragment.appendChild(card);
     }
     elements.itemsGrid.appendChild(fragment);
