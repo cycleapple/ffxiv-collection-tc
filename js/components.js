@@ -88,8 +88,9 @@ function getHuijiWikiUrl(item, collectionName) {
 // Create item card HTML
 function createItemCard(item) {
     const isOwned = isItemOwned(item.Id);
+    const isWishlisted = isItemInWishlist(currentCollection, item.Id);
     const card = document.createElement('div');
-    card.className = `item-card${isOwned ? ' owned' : ''}`;
+    card.className = `item-card${isOwned ? ' owned' : ''}${isWishlisted ? ' wishlisted' : ''}`;
     card.dataset.itemId = item.Id;
 
     const patchDisplay = item.DisplayPatch || (item.PatchAdded >= 999 ? '未知' : item.PatchAdded.toString());
@@ -100,6 +101,13 @@ function createItemCard(item) {
                 title="${isOwned ? '取消擁有' : '標記為已擁有'}">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
                 <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+        </button>
+        <button class="wishlist-toggle${isWishlisted ? ' active' : ''}"
+                data-item-id="${item.Id}"
+                title="${isWishlisted ? '從願望清單移除' : '加入願望清單'}">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="${isWishlisted ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
             </svg>
         </button>
         <img src="${item.IconUrl}" alt="${item.Name}" loading="lazy" onerror="this.src='https://xivapi.com/i/000000/000000.png'">
@@ -133,6 +141,116 @@ function createTabButton(collection, isActive) {
     btn.dataset.collection = collection.CollectionName;
     btn.textContent = COLLECTION_NAMES[collection.CollectionName] || collection.CollectionName;
     return btn;
+}
+
+// Show Wishlist page - displays all wishlist items from all collections
+function showWishlistPage() {
+    // Hide sidebar
+    document.querySelector('.sidebar').style.display = 'none';
+
+    // Hide sort options
+    document.querySelector('.sort-options').style.display = 'none';
+
+    // Hide load more container
+    const loadMoreContainer = document.getElementById('load-more-container');
+    if (loadMoreContainer) {
+        loadMoreContainer.classList.add('hidden');
+    }
+
+    // Get all wishlist items
+    const wishlistItems = [];
+    const wishlistSet = loadWishlist();
+
+    if (wishlistSet.size === 0) {
+        // Show empty state
+        document.getElementById('items-count').textContent = '願望清單 (0)';
+        document.getElementById('items-grid').innerHTML = `
+            <div class="wishlist-empty">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+                <h3>願望清單是空的</h3>
+                <p>點擊收藏品卡片上的星星圖示，將想要的物品加入願望清單</p>
+            </div>
+        `;
+        return;
+    }
+
+    // Collect all wishlist items from all collections
+    for (const key of wishlistSet) {
+        const { collectionName, itemId } = parseWishlistKey(key);
+        const collection = collectionsData?.Collections.find(c => c.CollectionName === collectionName);
+        if (collection) {
+            const item = collection.Items.find(i => i.Id === itemId);
+            if (item) {
+                wishlistItems.push({
+                    item,
+                    collectionName,
+                    collectionDisplayName: COLLECTION_NAMES[collectionName] || collectionName
+                });
+            }
+        }
+    }
+
+    // Update count
+    document.getElementById('items-count').textContent = `願望清單 (${wishlistItems.length})`;
+
+    // Group by collection for display
+    const grouped = {};
+    for (const { item, collectionName, collectionDisplayName } of wishlistItems) {
+        if (!grouped[collectionName]) {
+            grouped[collectionName] = {
+                displayName: collectionDisplayName,
+                items: []
+            };
+        }
+        grouped[collectionName].items.push(item);
+    }
+
+    // Render wishlist items grouped by collection
+    const grid = document.getElementById('items-grid');
+    grid.innerHTML = '';
+
+    for (const [collectionName, data] of Object.entries(grouped)) {
+        // Add collection header
+        const header = document.createElement('div');
+        header.className = 'wishlist-collection-header';
+        header.innerHTML = `<h3>${data.displayName}</h3><span class="wishlist-collection-count">(${data.items.length})</span>`;
+        grid.appendChild(header);
+
+        // Add items
+        for (const item of data.items) {
+            const card = createWishlistItemCard(item, collectionName);
+            grid.appendChild(card);
+        }
+    }
+}
+
+// Create wishlist item card (similar to createItemCard but with collection context)
+function createWishlistItemCard(item, collectionName) {
+    const isOwned = loadOwnedItems(collectionName).has(item.Id);
+    const card = document.createElement('div');
+    card.className = `item-card wishlist-item${isOwned ? ' owned' : ''}`;
+    card.dataset.itemId = item.Id;
+    card.dataset.collection = collectionName;
+
+    const patchDisplay = item.DisplayPatch || (item.PatchAdded >= 999 ? '未知' : item.PatchAdded.toString());
+
+    card.innerHTML = `
+        <button class="wishlist-remove-btn"
+                data-item-id="${item.Id}"
+                data-collection="${collectionName}"
+                title="從願望清單移除">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+        </button>
+        <img src="${item.IconUrl}" alt="${item.Name}" loading="lazy" onerror="this.src='https://xivapi.com/i/000000/000000.png'">
+        <div class="item-name">${item.Name || '???'}</div>
+        <div class="item-patch">Patch ${patchDisplay}</div>
+    `;
+
+    return card;
 }
 
 // Show About page

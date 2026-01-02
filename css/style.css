@@ -1006,3 +1006,145 @@ body {
 .owned-btn svg {
     flex-shrink: 0;
 }
+
+/* Wishlist Toggle on Card */
+.wishlist-toggle {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid var(--text-muted);
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    z-index: 1;
+}
+
+.wishlist-toggle:hover {
+    border-color: var(--accent-gold);
+    background: rgba(145, 125, 84, 0.3);
+    color: var(--accent-gold);
+}
+
+.wishlist-toggle.active {
+    background: var(--accent-gold);
+    border-color: var(--accent-gold);
+    color: white;
+}
+
+/* Wishlisted Card Style */
+.item-card.wishlisted {
+    box-shadow: inset 0 0 0 1px var(--accent-gold);
+}
+
+.item-card.wishlisted .wishlist-toggle {
+    background: var(--accent-gold);
+    border-color: var(--accent-gold);
+    color: white;
+}
+
+/* Modal Wishlist Button */
+.wishlist-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.wishlist-btn:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--accent-gold);
+}
+
+.wishlist-btn.active {
+    background: var(--accent-gold);
+    border-color: var(--accent-gold);
+    color: white;
+}
+
+.wishlist-btn svg {
+    flex-shrink: 0;
+}
+
+/* Wishlist Page */
+.wishlist-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+}
+
+.wishlist-empty svg {
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.wishlist-empty h3 {
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.wishlist-empty p {
+    font-size: 0.9rem;
+}
+
+.wishlist-collection-header {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 0 8px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 8px;
+}
+
+.wishlist-collection-header:not(:first-child) {
+    margin-top: 16px;
+}
+
+.wishlist-collection-header h3 {
+    color: var(--text-primary);
+    font-size: 1rem;
+}
+
+.wishlist-collection-count {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* Wishlist Remove Button */
+.wishlist-remove-btn {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent-gold);
+    border: 2px solid var(--accent-gold);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    z-index: 1;
+}
+
+.wishlist-remove-btn:hover {
+    background: var(--error);
+    border-color: var(--error);
+}

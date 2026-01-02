@@ -22,6 +22,9 @@ let currentCollectionData = null;
 // Owned items state
 let ownedItems = new Set();
 
+// Wishlist state (cross-collection)
+let wishlist = new Set();
+
 // Check if an item is owned
 function isItemOwned(itemId) {
     return ownedItems.has(itemId);
@@ -37,6 +40,23 @@ function toggleItemOwned(itemId) {
     saveOwnedItems(currentCollection, ownedItems);
 }
 
+// Check if an item is in wishlist
+function isItemInWishlist(collectionName, itemId) {
+    const key = getWishlistKey(collectionName, itemId);
+    return wishlist.has(key);
+}
+
+// Toggle item wishlist status
+function toggleItemWishlist(collectionName, itemId) {
+    const key = getWishlistKey(collectionName, itemId);
+    if (wishlist.has(key)) {
+        wishlist.delete(key);
+    } else {
+        wishlist.add(key);
+    }
+    saveWishlist(wishlist);
+}
+
 // Update card UI after owned status change
 function updateCardOwnedState(toggleBtn, itemId) {
     const isOwned = ownedItems.has(itemId);
@@ -49,6 +69,35 @@ function updateCardOwnedState(toggleBtn, itemId) {
     // If filtering by ownership, may need to hide/show this card
     if (filterState.ownershipFilter !== 'all') {
         renderItems();
+    }
+}
+
+// Update card UI after wishlist status change
+function updateCardWishlistState(toggleBtn, itemId) {
+    const isWishlisted = isItemInWishlist(currentCollection, itemId);
+    const card = toggleBtn.closest('.item-card');
+
+    toggleBtn.classList.toggle('active', isWishlisted);
+    toggleBtn.title = isWishlisted ? '從願望清單移除' : '加入願望清單';
+    card.classList.toggle('wishlisted', isWishlisted);
+
+    // Update the star icon fill
+    const svg = toggleBtn.querySelector('svg');
+    if (svg) {
+        svg.setAttribute('fill', isWishlisted ? 'currentColor' : 'none');
+    }
+}
+
+// Update modal wishlist button state
+function updateModalWishlistState(itemId) {
+    const isWishlisted = isItemInWishlist(currentCollection, itemId);
+    elements.modalWishlistBtn.classList.toggle('active', isWishlisted);
+    elements.modalWishlistBtn.querySelector('span').textContent = isWishlisted ? '已在願望清單' : '加入願望清單';
+
+    // Update the star icon fill
+    const svg = elements.modalWishlistBtn.querySelector('svg');
+    if (svg) {
+        svg.setAttribute('fill', isWishlisted ? 'currentColor' : 'none');
     }
 }
 
@@ -73,6 +122,7 @@ const elements = {
     modalSources: null,
     modalWikiLink: null,
     modalOwnedBtn: null,
+    modalWishlistBtn: null,
     loadingIndicator: null,
     loadMoreBtn: null,
     loadMoreContainer: null,
@@ -86,6 +136,9 @@ async function init() {
 
     // Load saved filter settings
     filterState.loadSettings();
+
+    // Load wishlist (cross-collection)
+    wishlist = loadWishlist();
 
     // Set up event listeners
     setupEventListeners();
@@ -129,6 +182,7 @@ function cacheElements() {
     elements.modalSources = document.getElementById('modal-sources');
     elements.modalWikiLink = document.getElementById('modal-wiki-link');
     elements.modalOwnedBtn = document.getElementById('modal-owned-btn');
+    elements.modalWishlistBtn = document.getElementById('modal-wishlist-btn');
     elements.loadingIndicator = document.getElementById('loading-indicator');
 
     // Create load more container dynamically
@@ -240,12 +294,34 @@ function setupEventListeners() {
     // Item card clicks
     elements.itemsGrid.addEventListener('click', (e) => {
         // Handle owned toggle click
-        const toggleBtn = e.target.closest('.owned-toggle');
-        if (toggleBtn) {
+        const ownedToggleBtn = e.target.closest('.owned-toggle');
+        if (ownedToggleBtn) {
             e.stopPropagation();
-            const itemId = parseInt(toggleBtn.dataset.itemId);
+            const itemId = parseInt(ownedToggleBtn.dataset.itemId);
             toggleItemOwned(itemId);
-            updateCardOwnedState(toggleBtn, itemId);
+            updateCardOwnedState(ownedToggleBtn, itemId);
+            return;
+        }
+
+        // Handle wishlist toggle click
+        const wishlistToggleBtn = e.target.closest('.wishlist-toggle');
+        if (wishlistToggleBtn) {
+            e.stopPropagation();
+            const itemId = parseInt(wishlistToggleBtn.dataset.itemId);
+            toggleItemWishlist(currentCollection, itemId);
+            updateCardWishlistState(wishlistToggleBtn, itemId);
+            return;
+        }
+
+        // Handle wishlist remove button click (on wishlist page)
+        const wishlistRemoveBtn = e.target.closest('.wishlist-remove-btn');
+        if (wishlistRemoveBtn) {
+            e.stopPropagation();
+            const itemId = parseInt(wishlistRemoveBtn.dataset.itemId);
+            const collectionName = wishlistRemoveBtn.dataset.collection;
+            toggleItemWishlist(collectionName, itemId);
+            // Refresh wishlist page
+            showWishlistPage();
             return;
         }
 
@@ -253,9 +329,19 @@ function setupEventListeners() {
         const card = e.target.closest('.item-card');
         if (card) {
             const itemId = parseInt(card.dataset.itemId);
-            const item = findItemById(itemId, currentCollection);
+            // For wishlist items, use the stored collection name
+            const collectionName = card.dataset.collection || currentCollection;
+            const item = findItemById(itemId, collectionName);
             if (item) {
+                // Temporarily set currentCollection for modal functions
+                const previousCollection = currentCollection;
+                currentCollection = collectionName;
+                ownedItems = loadOwnedItems(collectionName);
                 showItemDetail(item);
+                // Restore after modal is set up
+                if (previousCollection === 'wishlist') {
+                    currentCollection = 'wishlist';
+                }
             }
         }
     });
@@ -286,6 +372,20 @@ function setupEventListeners() {
             const cardToggle = document.querySelector(`.owned-toggle[data-item-id="${itemId}"]`);
             if (cardToggle) {
                 updateCardOwnedState(cardToggle, itemId);
+            }
+        }
+    });
+
+    // Modal wishlist button click
+    elements.modalWishlistBtn.addEventListener('click', () => {
+        const itemId = parseInt(elements.modalWishlistBtn.dataset.itemId);
+        if (!isNaN(itemId)) {
+            toggleItemWishlist(currentCollection, itemId);
+            updateModalWishlistState(itemId);
+            // Also update the card in the grid if visible
+            const cardToggle = document.querySelector(`.wishlist-toggle[data-item-id="${itemId}"]`);
+            if (cardToggle) {
+                updateCardWishlistState(cardToggle, itemId);
             }
         }
     });
@@ -368,6 +468,13 @@ function renderUI() {
         elements.tabsContainer.appendChild(btn);
     });
 
+    // Add "Wishlist" tab
+    const wishlistBtn = document.createElement('button');
+    wishlistBtn.className = 'tab-btn';
+    wishlistBtn.dataset.collection = 'wishlist';
+    wishlistBtn.textContent = '願望清單';
+    elements.tabsContainer.appendChild(wishlistBtn);
+
     // Add "About" tab
     const aboutBtn = document.createElement('button');
     aboutBtn.className = 'tab-btn';
@@ -445,6 +552,17 @@ function switchCollection(collectionName) {
         // Update tab UI
         elements.tabsContainer.querySelectorAll('.tab-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.collection === 'about');
+        });
+        return;
+    }
+
+    // Handle "Wishlist" page specially
+    if (collectionName === 'wishlist') {
+        currentCollection = 'wishlist';
+        showWishlistPage();
+        // Update tab UI
+        elements.tabsContainer.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.collection === 'wishlist');
         });
         return;
     }
@@ -715,6 +833,10 @@ function showItemDetail(item) {
     // Set owned button state
     elements.modalOwnedBtn.dataset.itemId = item.Id;
     updateModalOwnedState(item.Id);
+
+    // Set wishlist button state
+    elements.modalWishlistBtn.dataset.itemId = item.Id;
+    updateModalWishlistState(item.Id);
 
     elements.modal.classList.add('active');
     document.body.style.overflow = 'hidden';

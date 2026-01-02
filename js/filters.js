@@ -56,6 +56,26 @@ function saveOwnedItems(collectionName, ownedSet) {
     localStorage.setItem(key, JSON.stringify([...ownedSet]));
 }
 
+// Wishlist localStorage management (cross-collection)
+// Format: { "Mounts:123": true, "Minions:45": true, ... }
+function loadWishlist() {
+    const data = localStorage.getItem('ffxiv-wishlist');
+    return data ? new Set(JSON.parse(data)) : new Set();
+}
+
+function saveWishlist(wishlistSet) {
+    localStorage.setItem('ffxiv-wishlist', JSON.stringify([...wishlistSet]));
+}
+
+function getWishlistKey(collectionName, itemId) {
+    return `${collectionName}:${itemId}`;
+}
+
+function parseWishlistKey(key) {
+    const [collectionName, itemId] = key.split(':');
+    return { collectionName, itemId: parseInt(itemId) };
+}
+
 // Filter state management
 class FilterState {
     constructor() {
