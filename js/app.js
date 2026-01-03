@@ -473,8 +473,16 @@ function renderUI() {
 
     // Render tabs
     elements.tabsContainer.innerHTML = '';
+
+    // Add Homepage tab first
+    const homepageBtn = document.createElement('button');
+    homepageBtn.className = 'tab-btn active';
+    homepageBtn.dataset.collection = 'homepage';
+    homepageBtn.textContent = '首頁';
+    elements.tabsContainer.appendChild(homepageBtn);
+
     sortedCollections.forEach((collection, index) => {
-        const btn = createTabButton(collection, index === 0);
+        const btn = createTabButton(collection, false);
         elements.tabsContainer.appendChild(btn);
     });
 
@@ -485,19 +493,8 @@ function renderUI() {
     wishlistBtn.textContent = '願望清單';
     elements.tabsContainer.appendChild(wishlistBtn);
 
-    // Add "About" tab
-    const aboutBtn = document.createElement('button');
-    aboutBtn.className = 'tab-btn';
-    aboutBtn.dataset.collection = 'about';
-    aboutBtn.textContent = '關於';
-    elements.tabsContainer.appendChild(aboutBtn);
-
-    // Set initial collection
-    if (sortedCollections.length > 0) {
-        currentCollection = sortedCollections[0].CollectionName;
-        // Load owned items for initial collection
-        ownedItems = loadOwnedItems(currentCollection);
-    }
+    // Set initial collection to Homepage
+    currentCollection = 'homepage';
 
     // Render source filters
     renderSourceFilters();
@@ -505,8 +502,8 @@ function renderUI() {
     // Render patch filters
     renderPatchFilters();
 
-    // Render items
-    renderItems();
+    // Show Homepage as default
+    showHomepage();
 }
 
 // Render source category filters
@@ -555,13 +552,13 @@ function updateFilterUI() {
 function switchCollection(collectionName) {
     if (currentCollection === collectionName) return;
 
-    // Handle "About" page specially
-    if (collectionName === 'about') {
-        currentCollection = 'about';
-        showAboutPage();
+    // Handle Homepage specially
+    if (collectionName === 'homepage') {
+        currentCollection = 'homepage';
+        showHomepage();
         // Update tab UI
         elements.tabsContainer.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.collection === 'about');
+            btn.classList.toggle('active', btn.dataset.collection === 'homepage');
         });
         return;
     }

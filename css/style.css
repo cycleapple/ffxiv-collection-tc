@@ -856,40 +856,40 @@ body {
     color: var(--text-muted);
 }
 
-/* About Page */
-.about-page {
+/* Homepage */
+.homepage {
     grid-column: 1 / -1;
     text-align: center;
     padding: 60px 20px;
 }
 
-.about-page h2 {
+.homepage h2 {
     margin-bottom: 20px;
     color: var(--text-primary);
 }
 
-.about-description {
+.homepage-description {
     color: var(--text-secondary);
     line-height: 1.8;
     margin-bottom: 30px;
 }
 
-.about-description a {
+.homepage-description a {
     color: var(--accent);
 }
 
-.about-description a:hover {
+.homepage-description a:hover {
     text-decoration: underline;
 }
 
-.about-links {
+.homepage-links {
     display: flex;
     flex-direction: column;
     gap: 16px;
     align-items: center;
 }
 
-.about-links a {
+.homepage-links a {
     padding: 12px 24px;
     background: var(--bg-card);
     color: var(--text-secondary);
@@ -898,7 +898,7 @@ body {
     transition: background 0.2s, color 0.2s;
 }
 
-.about-links a:hover {
+.homepage-links a:hover {
     background: var(--bg-card-hover);
     color: var(--text-primary);
 }
