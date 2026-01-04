@@ -570,6 +570,7 @@ function getSourceTypeName(type) {
         'Monster': '怪物',
         'Misc': '其他',
         'Npc': 'NPC',
+        'Venture': '雇員探索',
     };
     return typeNames[type] || type;
 }
