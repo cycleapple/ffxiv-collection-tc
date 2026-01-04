@@ -115,9 +115,9 @@ function createItemCard(item, index) {
                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
             </svg>
         </button>
-        ${spellNumberHtml}
         <img src="${item.IconUrl}" alt="${item.Name}" loading="lazy" onerror="this.src='https://xivapi.com/i/000000/000000.png'">
         <div class="item-name">${item.Name || '???'}</div>
+        ${spellNumberHtml}
         <div class="item-patch">Patch ${patchDisplay}</div>
     `;
 
