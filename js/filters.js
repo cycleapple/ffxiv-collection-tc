@@ -23,7 +23,8 @@ const SOURCE_CATEGORIES = {
     HuntSeals: { name: '狩獵', iconId: 65034 },
     TreasureHunts: { name: '挖寶', iconId: 115 },
     Crafting: { name: '製作', iconId: 62202 },
-    Voyages: { name: '遠航探索', iconId: 65035 }
+    Voyages: { name: '遠航探索', iconId: 65035 },
+    Venture: { name: '雇員探索', iconId: 65049 }
 };
 
 // Major patch versions for filtering with expansion icons
