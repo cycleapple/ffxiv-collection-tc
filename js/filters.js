@@ -240,5 +240,12 @@ const SORT_FUNCTIONS = {
     'name': (a, b) => (a.Name || '').localeCompare(b.Name || '', 'zh-TW'),
     'patch-desc': (a, b) => b.PatchAdded - a.PatchAdded,
     'patch-asc': (a, b) => a.PatchAdded - b.PatchAdded,
-    'id': (a, b) => a.Id - b.Id
+    'id': (a, b) => a.Id - b.Id,
+    'spell-no': (a, b) => {
+        // Sort by Blue Mage spell number
+        if (!blueMageSources) return 0;
+        const noA = blueMageSources[a.Id] ? parseInt(blueMageSources[a.Id].no) : 999;
+        const noB = blueMageSources[b.Id] ? parseInt(blueMageSources[b.Id].no) : 999;
+        return noA - noB;
+    }
 };

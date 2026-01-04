@@ -602,8 +602,12 @@ function renderItems() {
     // Filter items
     currentFilteredItems = currentCollectionData.Items.filter(item => filterState.passesFilters(item, isItemOwned));
 
-    // Sort items
-    const sortFn = SORT_FUNCTIONS[currentSort] || SORT_FUNCTIONS['name'];
+    // Sort items (Blue Mage defaults to spell number sorting)
+    let sortKey = currentSort;
+    if (currentCollection === 'Blue Mage' && currentSort === 'name') {
+        sortKey = 'spell-no';
+    }
+    const sortFn = SORT_FUNCTIONS[sortKey] || SORT_FUNCTIONS['name'];
     currentFilteredItems.sort(sortFn);
 
     // Reset pagination

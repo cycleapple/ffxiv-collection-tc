@@ -439,6 +439,18 @@ body {
     margin-top: 4px;
 }
 
+.item-card .item-spell-no {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #ffd700;
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
 /* Loading */
 .loading {
     display: flex;
