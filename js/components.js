@@ -98,7 +98,14 @@ function createItemCard(item, index) {
 
     // Check if this is a Blue Mage spell and get spell number
     const blueMageSpell = (currentCollection === 'Blue Mage' && blueMageSources) ? blueMageSources[item.Id] : null;
-    const spellNumberHtml = blueMageSpell ? `<div class="item-spell-no">No.${blueMageSpell.no}</div>` : '';
+
+    // Display number for Blue Mage spells or Triple Triad cards
+    let itemNumberHtml = '';
+    if (blueMageSpell) {
+        itemNumberHtml = `<div class="item-spell-no">No.${blueMageSpell.no}</div>`;
+    } else if (currentCollection === 'Triple Triad' && item.CardNumberDisplay) {
+        itemNumberHtml = `<div class="item-spell-no">${item.CardNumberDisplay}</div>`;
+    }
 
     card.innerHTML = `
         <button class="owned-toggle${isOwned ? ' active' : ''}"
@@ -117,7 +124,7 @@ function createItemCard(item, index) {
         </button>
         <img src="${item.IconUrl}" alt="${item.Name}" loading="lazy" onerror="this.src='https://xivapi.com/i/000000/000000.png'">
         <div class="item-name">${item.Name || '???'}</div>
-        ${spellNumberHtml}
+        ${itemNumberHtml}
         <div class="item-patch">Patch ${patchDisplay}</div>
     `;
 
