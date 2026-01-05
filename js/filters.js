@@ -249,5 +249,11 @@ const SORT_FUNCTIONS = {
         const noA = blueMageSources[a.Id] ? parseInt(blueMageSources[a.Id].no) : 999;
         const noB = blueMageSources[b.Id] ? parseInt(blueMageSources[b.Id].no) : 999;
         return noA - noB;
+    },
+    'card-no': (a, b) => {
+        // Sort by Triple Triad card number
+        const noA = a.CardNumber ?? 9999;
+        const noB = b.CardNumber ?? 9999;
+        return noA - noB;
     }
 };

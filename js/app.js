@@ -602,10 +602,12 @@ function renderItems() {
     // Filter items
     currentFilteredItems = currentCollectionData.Items.filter(item => filterState.passesFilters(item, isItemOwned));
 
-    // Sort items (Blue Mage defaults to spell number sorting)
+    // Sort items (Blue Mage defaults to spell number, Triple Triad to card number)
     let sortKey = currentSort;
     if (currentCollection === 'Blue Mage' && currentSort === 'name') {
         sortKey = 'spell-no';
+    } else if (currentCollection === 'Triple Triad' && currentSort === 'name') {
+        sortKey = 'card-no';
     }
     const sortFn = SORT_FUNCTIONS[sortKey] || SORT_FUNCTIONS['name'];
     currentFilteredItems.sort(sortFn);
