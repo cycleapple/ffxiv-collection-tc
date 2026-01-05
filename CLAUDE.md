@@ -79,6 +79,7 @@ Collections/Website/
 | Crafting | 製作 | 62202 |
 | Voyages | 遠航探索 | 65035 |
 | Venture | 雇員探索 | 65049 |
+| FirmamentFete | 蒼天街 | 65073 |
 
 ## 常用操作
 

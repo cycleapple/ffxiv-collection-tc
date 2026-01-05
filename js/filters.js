@@ -24,7 +24,8 @@ const SOURCE_CATEGORIES = {
     TreasureHunts: { name: '挖寶', iconId: 115 },
     Crafting: { name: '製作', iconId: 62202 },
     Voyages: { name: '遠航探索', iconId: 65035 },
-    Venture: { name: '雇員探索', iconId: 65049 }
+    Venture: { name: '雇員探索', iconId: 65049 },
+    FirmamentFete: { name: '蒼天街', iconId: 65073 }
 };
 
 // Major patch versions for filtering with expansion icons
