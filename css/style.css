@@ -646,6 +646,30 @@ body {
     border: 1px solid var(--border);
 }
 
+/* Frame previews */
+.frame-previews {
+    margin-bottom: 1.5rem;
+}
+
+.frame-previews h3 {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+}
+
+.frame-images {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.frame-images img {
+    max-width: 200px;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
 .sources-section h3 {
     font-size: 1rem;
     margin-bottom: 0.75rem;

@@ -869,6 +869,33 @@ function showItemDetail(item) {
         hairstylePreviewsEl.style.display = 'none';
     }
 
+    // Render frame previews
+    const framePreviewsEl = document.getElementById('frame-previews');
+    if (currentCollection === 'Framer Kits' && item.FrameImage) {
+        const container = framePreviewsEl.querySelector('.frame-images');
+        container.innerHTML = '';
+
+        // Add main image
+        const img1 = document.createElement('img');
+        img1.src = item.FrameImage;
+        img1.alt = item.Name;
+        img1.onerror = function() { this.style.display = 'none'; };
+        container.appendChild(img1);
+
+        // Add flipped image if available
+        if (item.FrameImageFlipped) {
+            const img2 = document.createElement('img');
+            img2.src = item.FrameImageFlipped;
+            img2.alt = item.Name + ' (反轉)';
+            img2.onerror = function() { this.style.display = 'none'; };
+            container.appendChild(img2);
+        }
+
+        framePreviewsEl.style.display = '';
+    } else {
+        framePreviewsEl.style.display = 'none';
+    }
+
     // Set owned button state
     elements.modalOwnedBtn.dataset.itemId = item.Id;
     updateModalOwnedState(item.Id);
