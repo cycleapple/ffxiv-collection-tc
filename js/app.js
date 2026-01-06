@@ -880,6 +880,7 @@ function showItemDetail(item) {
         img1.src = item.FrameImage;
         img1.alt = item.Name;
         img1.onerror = function() { this.style.display = 'none'; };
+        img1.onclick = function() { openLightbox(this.src, this.alt); };
         container.appendChild(img1);
 
         // Add flipped image if available
@@ -888,6 +889,7 @@ function showItemDetail(item) {
             img2.src = item.FrameImageFlipped;
             img2.alt = item.Name + ' (反轉)';
             img2.onerror = function() { this.style.display = 'none'; };
+            img2.onclick = function() { openLightbox(this.src, this.alt); };
             container.appendChild(img2);
         }
 
@@ -914,5 +916,48 @@ function closeModal() {
     document.body.style.overflow = '';
 }
 
+// Lightbox functions
+function openLightbox(src, alt) {
+    const lightbox = document.getElementById('image-lightbox');
+    const lightboxImg = lightbox.querySelector('.lightbox-image');
+    lightboxImg.src = src;
+    lightboxImg.alt = alt || '';
+    lightbox.classList.add('active');
+}
+
+function closeLightbox() {
+    const lightbox = document.getElementById('image-lightbox');
+    lightbox.classList.remove('active');
+}
+
+// Initialize lightbox event listeners
+function initLightbox() {
+    const lightbox = document.getElementById('image-lightbox');
+    if (!lightbox) return;
+
+    // Close on clicking close button
+    const closeBtn = lightbox.querySelector('.lightbox-close');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeLightbox);
+    }
+
+    // Close on clicking background
+    lightbox.addEventListener('click', function(e) {
+        if (e.target === lightbox) {
+            closeLightbox();
+        }
+    });
+
+    // Close on ESC key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+            closeLightbox();
+        }
+    });
+}
+
 // Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded', function() {
+    init();
+    initLightbox();
+});
