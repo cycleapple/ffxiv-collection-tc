@@ -578,6 +578,7 @@ function getSourceTypeName(type) {
         'Misc': '其他',
         'Npc': 'NPC',
         'Venture': '雇員探索',
+        'FirmamentFete': '蒼天街',
     };
     return typeNames[type] || type;
 }
