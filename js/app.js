@@ -843,6 +843,27 @@ function showItemDetail(item) {
         elements.modalWikiLink.style.display = 'none';
     }
 
+    // Render hairstyle race previews
+    const hairstylePreviewsEl = document.getElementById('hairstyle-previews');
+    if (currentCollection === 'Hairstyles' && item.SpriteUrl) {
+        const grid = hairstylePreviewsEl.querySelector('.hairstyle-grid');
+        grid.innerHTML = '';
+
+        // 18 race/gender combinations, each 192px wide in the sprite
+        for (let i = 0; i < 18; i++) {
+            const preview = document.createElement('div');
+            preview.className = 'hairstyle-preview';
+            preview.style.backgroundImage = `url('${item.SpriteUrl}')`;
+            preview.style.backgroundPosition = `-${i * 192}px 0`;
+            preview.style.backgroundSize = 'auto 100%';
+            grid.appendChild(preview);
+        }
+
+        hairstylePreviewsEl.style.display = '';
+    } else {
+        hairstylePreviewsEl.style.display = 'none';
+    }
+
     // Set owned button state
     elements.modalOwnedBtn.dataset.itemId = item.Id;
     updateModalOwnedState(item.Id);

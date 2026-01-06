@@ -608,6 +608,44 @@ body {
     white-space: pre-wrap;
 }
 
+/* Hairstyle race previews */
+.hairstyle-previews {
+    margin-bottom: 1.5rem;
+}
+
+.hairstyle-previews h3 {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+}
+
+.hairstyle-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+}
+
+@media (max-width: 768px) {
+    .hairstyle-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .hairstyle-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.hairstyle-preview {
+    width: 100%;
+    aspect-ratio: 1;
+    background-size: cover;
+    background-position: center;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+}
+
 .sources-section h3 {
     font-size: 1rem;
     margin-bottom: 0.75rem;
