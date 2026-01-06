@@ -849,13 +849,17 @@ function showItemDetail(item) {
         const grid = hairstylePreviewsEl.querySelector('.hairstyle-grid');
         grid.innerHTML = '';
 
-        // 18 race/gender combinations, each 192px wide in the sprite
+        // 18 race/gender combinations in sprite (3456x192, each frame 192x192)
+        // Use percentage-based positioning: frame i at position (i / 17 * 100)%
         for (let i = 0; i < 18; i++) {
             const preview = document.createElement('div');
             preview.className = 'hairstyle-preview';
             preview.style.backgroundImage = `url('${item.SpriteUrl}')`;
-            preview.style.backgroundPosition = `-${i * 192}px 0`;
-            preview.style.backgroundSize = 'auto 100%';
+            // background-size: 1800% stretches sprite so each frame = container width
+            preview.style.backgroundSize = '1800% 100%';
+            // position as percentage (0% = first frame, 100% = last frame)
+            const posPercent = i === 0 ? 0 : (i / 17) * 100;
+            preview.style.backgroundPosition = `${posPercent}% 0`;
             grid.appendChild(preview);
         }
 
