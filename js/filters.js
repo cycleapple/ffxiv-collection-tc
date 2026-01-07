@@ -261,8 +261,8 @@ const SORT_FUNCTIONS = {
 // Data export/import functions
 const DATA_EXPORT_VERSION = 1;
 
-// Collection names for export (must match the keys used in localStorage)
-const COLLECTION_NAMES = [
+// Collection keys for export (must match the keys used in localStorage)
+const EXPORT_COLLECTION_KEYS = [
     'Mounts', 'Minions', 'Orchestrions', 'Emotes', 'Bardings',
     'Hairstyles', 'Fashion Accessories', 'Triple Triad', 'Blue Mage',
     'Framer Kits', 'Glamour', 'Glasses', 'Survey Records'
@@ -280,7 +280,7 @@ function exportAllData() {
     };
 
     // Export owned items for each collection
-    for (const collectionName of COLLECTION_NAMES) {
+    for (const collectionName of EXPORT_COLLECTION_KEYS) {
         const ownedItems = loadOwnedItems(collectionName);
         if (ownedItems.size > 0) {
             exportData.data.owned[collectionName] = [...ownedItems];
@@ -339,7 +339,7 @@ function importAllData(jsonData) {
     const { owned, wishlist, settings } = jsonData.data;
 
     // Clear existing data first
-    for (const collectionName of COLLECTION_NAMES) {
+    for (const collectionName of EXPORT_COLLECTION_KEYS) {
         localStorage.removeItem(`ffxiv-owned-${collectionName}`);
     }
     localStorage.removeItem('ffxiv-wishlist');
@@ -369,7 +369,7 @@ function importAllData(jsonData) {
 
 function getExportStats() {
     let totalOwned = 0;
-    for (const collectionName of COLLECTION_NAMES) {
+    for (const collectionName of EXPORT_COLLECTION_KEYS) {
         totalOwned += loadOwnedItems(collectionName).size;
     }
     const wishlistCount = loadWishlist().size;

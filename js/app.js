@@ -498,6 +498,13 @@ function updateModalOwnedState(itemId) {
     elements.modalOwnedBtn.querySelector('span').textContent = isOwned ? '已擁有' : '標記為已擁有';
 }
 
+// Show/hide loading indicator
+function showLoading(show) {
+    if (elements.loadingIndicator) {
+        elements.loadingIndicator.style.display = show ? 'flex' : 'none';
+    }
+}
+
 // Load JSON data
 async function loadData() {
     showLoading(true);
