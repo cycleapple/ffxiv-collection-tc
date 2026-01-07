@@ -403,6 +403,7 @@ body {
 
 .progress-bar {
     flex: 1;
+    min-width: 100px;
     height: 6px;
     background: var(--border);
     border-radius: 3px;
