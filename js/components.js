@@ -167,15 +167,31 @@ function updateCollectionProgress(collectionName, items, ownedSet) {
     const owned = itemsWithSources.filter(item => ownedSet.has(item.Id)).length;
     const percentage = total > 0 ? (owned / total * 100) : 0;
 
-    progressContainer.innerHTML = `
-        <div class="progress-info">
-            <span class="progress-text">${owned} / ${total}</span>
-            <span class="progress-percent">${percentage.toFixed(1)}%</span>
-        </div>
-        <div class="progress-bar">
-            <div class="progress-fill" style="width: ${percentage}%"></div>
-        </div>
-    `;
+    // Clear and rebuild with proper elements
+    progressContainer.innerHTML = '';
+
+    // Count text
+    const countSpan = document.createElement('span');
+    countSpan.style.cssText = 'font-size: 0.85rem; color: #eee; margin-right: 8px;';
+    countSpan.textContent = `${owned} / ${total}`;
+
+    // Progress bar container (outer)
+    const barOuter = document.createElement('div');
+    barOuter.style.cssText = 'width: 120px; height: 8px; background: #444; border-radius: 4px; overflow: hidden; flex-shrink: 0;';
+
+    // Progress bar fill (inner)
+    const barInner = document.createElement('div');
+    barInner.style.cssText = `width: ${percentage}%; height: 8px; background: linear-gradient(90deg, #5C6E8E, #917D54); border-radius: 4px;`;
+    barOuter.appendChild(barInner);
+
+    // Percentage text
+    const percentSpan = document.createElement('span');
+    percentSpan.style.cssText = 'font-size: 0.85rem; color: #917D54; margin-left: 8px;';
+    percentSpan.textContent = `${percentage.toFixed(1)}%`;
+
+    progressContainer.appendChild(countSpan);
+    progressContainer.appendChild(barOuter);
+    progressContainer.appendChild(percentSpan);
 }
 
 // Show Wishlist page - displays all wishlist items from all collections
