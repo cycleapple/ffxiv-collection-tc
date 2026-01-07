@@ -38,8 +38,10 @@ function toggleItemOwned(itemId) {
         ownedItems.add(itemId);
     }
     saveOwnedItems(currentCollection, ownedItems);
-    // Update collection progress
-    updateCollectionProgress(currentCollection, currentCollectionData.Items, ownedItems);
+    // Update collection progress (skip for Glamour)
+    if (currentCollection !== 'Glamour') {
+        updateCollectionProgress(currentCollection, currentCollectionData.Items, ownedItems);
+    }
 }
 
 // Check if an item is in wishlist
@@ -710,8 +712,12 @@ function renderItems() {
     // Update count
     elements.itemsCount.textContent = `顯示 0 / ${currentFilteredItems.length} 項（共 ${currentCollectionData.Items.length} 項）`;
 
-    // Update collection progress
-    updateCollectionProgress(currentCollection, currentCollectionData.Items, ownedItems);
+    // Update collection progress (skip for Glamour)
+    if (currentCollection === 'Glamour') {
+        document.getElementById('collection-progress').innerHTML = '';
+    } else {
+        updateCollectionProgress(currentCollection, currentCollectionData.Items, ownedItems);
+    }
 
     // Clear grid
     elements.itemsGrid.innerHTML = '';
