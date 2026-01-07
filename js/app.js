@@ -38,6 +38,8 @@ function toggleItemOwned(itemId) {
         ownedItems.add(itemId);
     }
     saveOwnedItems(currentCollection, ownedItems);
+    // Update tab progress
+    updateTabProgress(currentCollection, collectionsData);
 }
 
 // Check if an item is in wishlist

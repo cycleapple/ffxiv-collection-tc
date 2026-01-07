@@ -147,12 +147,54 @@ const COLLECTION_NAMES = {
     'Glasses': '眼鏡'
 };
 
+// Calculate collection progress (excluding items without sources)
+function getCollectionProgress(collection) {
+    const ownedSet = loadOwnedItems(collection.CollectionName);
+    // Filter items that have sources
+    const itemsWithSources = collection.Items.filter(item => item.Sources && item.Sources.length > 0);
+    const total = itemsWithSources.length;
+    const owned = itemsWithSources.filter(item => ownedSet.has(item.Id)).length;
+    return { owned, total };
+}
+
+// Update tab progress display for a specific collection
+function updateTabProgress(collectionName, collectionsData) {
+    const tabBtn = document.querySelector(`.tab-btn[data-collection="${collectionName}"]`);
+    if (!tabBtn || !collectionsData) return;
+
+    const collection = collectionsData.Collections.find(c => c.CollectionName === collectionName);
+    if (!collection) return;
+
+    const progress = getCollectionProgress(collection);
+    const percentage = progress.total > 0 ? (progress.owned / progress.total * 100) : 0;
+
+    const progressText = tabBtn.querySelector('.tab-progress');
+    const progressFill = tabBtn.querySelector('.tab-progress-fill');
+
+    if (progressText) {
+        progressText.textContent = `${progress.owned}/${progress.total}`;
+    }
+    if (progressFill) {
+        progressFill.style.width = `${percentage}%`;
+    }
+}
+
 // Create collection tab button
 function createTabButton(collection, isActive) {
     const btn = document.createElement('button');
     btn.className = `tab-btn${isActive ? ' active' : ''}`;
     btn.dataset.collection = collection.CollectionName;
-    btn.textContent = COLLECTION_NAMES[collection.CollectionName] || collection.CollectionName;
+
+    const progress = getCollectionProgress(collection);
+    const percentage = progress.total > 0 ? (progress.owned / progress.total * 100) : 0;
+
+    btn.innerHTML = `
+        <span class="tab-name">${COLLECTION_NAMES[collection.CollectionName] || collection.CollectionName}</span>
+        <span class="tab-progress">${progress.owned}/${progress.total}</span>
+        <div class="tab-progress-bar">
+            <div class="tab-progress-fill" style="width: ${percentage}%"></div>
+        </div>
+    `;
     return btn;
 }
 
