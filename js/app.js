@@ -126,7 +126,16 @@ const elements = {
     loadingIndicator: null,
     loadMoreBtn: null,
     loadMoreContainer: null,
-    remainingSpan: null
+    remainingSpan: null,
+    // Settings modal elements
+    settingsBtn: null,
+    settingsModal: null,
+    settingsModalClose: null,
+    exportBtn: null,
+    exportStats: null,
+    exportTextarea: null,
+    importTextarea: null,
+    importBtn: null
 };
 
 // Initialize the application
@@ -184,6 +193,16 @@ function cacheElements() {
     elements.modalOwnedBtn = document.getElementById('modal-owned-btn');
     elements.modalWishlistBtn = document.getElementById('modal-wishlist-btn');
     elements.loadingIndicator = document.getElementById('loading-indicator');
+
+    // Settings modal elements
+    elements.settingsBtn = document.getElementById('settings-btn');
+    elements.settingsModal = document.getElementById('settings-modal');
+    elements.settingsModalClose = document.getElementById('settings-modal-close');
+    elements.exportBtn = document.getElementById('export-btn');
+    elements.exportStats = document.getElementById('export-stats');
+    elements.exportTextarea = document.getElementById('export-textarea');
+    elements.importTextarea = document.getElementById('import-textarea');
+    elements.importBtn = document.getElementById('import-btn');
 
     // Create load more container dynamically
     createLoadMoreButton();
@@ -404,6 +423,70 @@ function setupEventListeners() {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && elements.modal.classList.contains('active')) {
             closeModal();
+        }
+        if (e.key === 'Escape' && elements.settingsModal.classList.contains('active')) {
+            closeSettingsModal();
+        }
+    });
+
+    // Settings button click
+    elements.settingsBtn.addEventListener('click', openSettingsModal);
+
+    // Settings modal close
+    elements.settingsModalClose.addEventListener('click', closeSettingsModal);
+    elements.settingsModal.addEventListener('click', (e) => {
+        if (e.target === elements.settingsModal) {
+            closeSettingsModal();
+        }
+    });
+
+    // Export button click - generate backup code and copy to clipboard
+    elements.exportBtn.addEventListener('click', () => {
+        const backupCode = exportAllData();
+        elements.exportTextarea.value = backupCode;
+        elements.exportTextarea.select();
+
+        // Try to copy to clipboard
+        navigator.clipboard.writeText(backupCode).then(() => {
+            elements.exportBtn.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                已複製！
+            `;
+            setTimeout(() => {
+                elements.exportBtn.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    產生備份碼
+                `;
+            }, 2000);
+        }).catch(() => {
+            // Fallback: just show the code for manual copy
+            alert('備份碼已產生，請手動複製');
+        });
+    });
+
+    // Import button click
+    elements.importBtn.addEventListener('click', () => {
+        const backupCode = elements.importTextarea.value.trim();
+        if (!backupCode) {
+            alert('請先貼上備份碼');
+            return;
+        }
+
+        if (!confirm('確定要還原資料嗎？這會覆蓋現有的所有資料。')) {
+            return;
+        }
+
+        try {
+            importFromString(backupCode);
+            alert('資料還原成功！頁面將重新載入。');
+            location.reload();
+        } catch (error) {
+            alert('還原失敗：' + error.message);
         }
     });
 }
@@ -913,6 +996,21 @@ function showItemDetail(item) {
 // Close modal
 function closeModal() {
     elements.modal.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+// Settings modal functions
+function openSettingsModal() {
+    // Update export stats before showing
+    const stats = getExportStats();
+    elements.exportStats.textContent = `已擁有 ${stats.totalOwned} 件，願望清單 ${stats.wishlistCount} 件`;
+
+    elements.settingsModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeSettingsModal() {
+    elements.settingsModal.classList.remove('active');
     document.body.style.overflow = '';
 }
 

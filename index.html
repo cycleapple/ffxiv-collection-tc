@@ -31,6 +31,12 @@
                 <input type="text" id="search-input" placeholder="搜尋收藏品..." autocomplete="off">
                 <div id="search-results" class="search-results"></div>
             </div>
+            <button id="settings-btn" class="settings-btn" title="設定">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+            </button>
         </div>
     </header>
 
@@ -175,6 +181,47 @@
     <div id="image-lightbox" class="lightbox">
         <button class="lightbox-close">&times;</button>
         <img class="lightbox-image" src="" alt="">
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content settings-modal-content">
+            <button class="modal-close" id="settings-modal-close">&times;</button>
+            <div class="modal-body">
+                <h2 class="settings-title">資料備份</h2>
+
+                <div class="settings-section">
+                    <h3>匯出資料</h3>
+                    <p class="settings-desc">點擊產生備份碼，複製後可儲存或分享至其他裝置。</p>
+                    <p id="export-stats" class="settings-stats"></p>
+                    <button id="export-btn" class="settings-action-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        產生備份碼
+                    </button>
+                    <textarea id="export-textarea" class="settings-textarea" readonly placeholder="點擊上方按鈕產生備份碼..."></textarea>
+                </div>
+
+                <hr class="settings-divider">
+
+                <div class="settings-section">
+                    <h3>匯入資料</h3>
+                    <p class="settings-desc">貼上備份碼後點擊還原。</p>
+                    <p class="settings-warning">注意：匯入會覆蓋現有的所有資料！</p>
+                    <textarea id="import-textarea" class="settings-textarea" placeholder="在此貼上備份碼..."></textarea>
+                    <button id="import-btn" class="settings-action-btn import-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        還原資料
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="js/filters.js"></script>

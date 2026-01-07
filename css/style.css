@@ -1266,3 +1266,132 @@ body {
     background: var(--error);
     border-color: var(--error);
 }
+
+/* Settings Button */
+.settings-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.settings-btn:hover {
+    background: var(--surface-hover);
+    color: var(--text-primary);
+}
+
+.settings-btn svg {
+    transition: transform 0.3s;
+}
+
+.settings-btn:hover svg {
+    transform: rotate(45deg);
+}
+
+/* Settings Modal */
+.settings-modal-content {
+    max-width: 450px;
+}
+
+.settings-title {
+    margin: 0 0 1.5rem 0;
+    color: var(--text-primary);
+    font-size: 1.25rem;
+}
+
+.settings-section {
+    margin-bottom: 1.5rem;
+}
+
+.settings-section h3 {
+    margin: 0 0 0.5rem 0;
+    color: var(--text-primary);
+    font-size: 1rem;
+}
+
+.settings-desc {
+    margin: 0 0 0.75rem 0;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.settings-stats {
+    margin: 0 0 0.75rem 0;
+    color: var(--accent-gold);
+    font-size: 0.875rem;
+}
+
+.settings-warning {
+    margin: 0 0 0.75rem 0;
+    color: var(--error);
+    font-size: 0.875rem;
+}
+
+.settings-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 1.5rem 0;
+}
+
+.settings-action-btn,
+.settings-file-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.settings-action-btn:hover,
+.settings-file-btn:hover {
+    background: #3b82f6;
+    transform: translateY(-1px);
+}
+
+.settings-textarea {
+    width: 100%;
+    min-height: 80px;
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-family: monospace;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    resize: vertical;
+    word-break: break-all;
+}
+
+.settings-textarea:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+}
+
+.settings-textarea[readonly] {
+    background: var(--surface-hover);
+    cursor: default;
+}
+
+.settings-textarea::placeholder {
+    color: var(--text-secondary);
+}
+
+.import-btn {
+    margin-top: 0.75rem;
+}

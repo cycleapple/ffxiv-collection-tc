@@ -257,3 +257,121 @@ const SORT_FUNCTIONS = {
         return noA - noB;
     }
 };
+
+// Data export/import functions
+const DATA_EXPORT_VERSION = 1;
+
+// Collection names for export (must match the keys used in localStorage)
+const COLLECTION_NAMES = [
+    'Mounts', 'Minions', 'Orchestrions', 'Emotes', 'Bardings',
+    'Hairstyles', 'Fashion Accessories', 'Triple Triad', 'Blue Mage',
+    'Framer Kits', 'Glamour', 'Glasses', 'Survey Records'
+];
+
+function exportAllData() {
+    const exportData = {
+        version: DATA_EXPORT_VERSION,
+        exportedAt: new Date().toISOString(),
+        data: {
+            owned: {},
+            wishlist: [],
+            settings: {}
+        }
+    };
+
+    // Export owned items for each collection
+    for (const collectionName of COLLECTION_NAMES) {
+        const ownedItems = loadOwnedItems(collectionName);
+        if (ownedItems.size > 0) {
+            exportData.data.owned[collectionName] = [...ownedItems];
+        }
+    }
+
+    // Export wishlist
+    const wishlist = loadWishlist();
+    if (wishlist.size > 0) {
+        exportData.data.wishlist = [...wishlist];
+    }
+
+    // Export settings
+    const settingsData = localStorage.getItem('ffxiv-filter-settings');
+    if (settingsData) {
+        try {
+            exportData.data.settings = JSON.parse(settingsData);
+        } catch (e) {
+            // Ignore invalid settings
+        }
+    }
+
+    // Return Base64 encoded string
+    const jsonString = JSON.stringify(exportData);
+    return btoa(unescape(encodeURIComponent(jsonString)));
+}
+
+function importFromString(base64String) {
+    try {
+        // Decode Base64 to JSON
+        const jsonString = decodeURIComponent(escape(atob(base64String.trim())));
+        const jsonData = JSON.parse(jsonString);
+        return importAllData(jsonData);
+    } catch (e) {
+        if (e.message.includes('無效') || e.message.includes('缺少') || e.message.includes('版本')) {
+            throw e;
+        }
+        throw new Error('無效的備份碼，請確認複製完整');
+    }
+}
+
+function importAllData(jsonData) {
+    // Validate data structure
+    if (!jsonData || typeof jsonData !== 'object') {
+        throw new Error('無效的資料格式');
+    }
+
+    if (!jsonData.version || !jsonData.data) {
+        throw new Error('缺少必要的資料欄位');
+    }
+
+    if (jsonData.version > DATA_EXPORT_VERSION) {
+        throw new Error('資料版本過新，請更新網站後再試');
+    }
+
+    const { owned, wishlist, settings } = jsonData.data;
+
+    // Clear existing data first
+    for (const collectionName of COLLECTION_NAMES) {
+        localStorage.removeItem(`ffxiv-owned-${collectionName}`);
+    }
+    localStorage.removeItem('ffxiv-wishlist');
+    localStorage.removeItem('ffxiv-filter-settings');
+
+    // Import owned items
+    if (owned && typeof owned === 'object') {
+        for (const [collectionName, items] of Object.entries(owned)) {
+            if (Array.isArray(items) && items.length > 0) {
+                saveOwnedItems(collectionName, new Set(items));
+            }
+        }
+    }
+
+    // Import wishlist
+    if (Array.isArray(wishlist) && wishlist.length > 0) {
+        saveWishlist(new Set(wishlist));
+    }
+
+    // Import settings
+    if (settings && typeof settings === 'object') {
+        localStorage.setItem('ffxiv-filter-settings', JSON.stringify(settings));
+    }
+
+    return true;
+}
+
+function getExportStats() {
+    let totalOwned = 0;
+    for (const collectionName of COLLECTION_NAMES) {
+        totalOwned += loadOwnedItems(collectionName).size;
+    }
+    const wishlistCount = loadWishlist().size;
+    return { totalOwned, wishlistCount };
+}
