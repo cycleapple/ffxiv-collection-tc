@@ -417,6 +417,89 @@ body {
     transition: width 0.3s ease;
 }
 
+/* Progress Settings Button and Dropdown */
+.progress-settings-wrapper {
+    position: relative;
+    margin-left: 8px;
+}
+
+.progress-settings-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    background: transparent;
+    border: 1px solid #555;
+    border-radius: 4px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.progress-settings-btn:hover {
+    background: var(--bg-card-hover);
+    color: var(--text-primary);
+    border-color: var(--accent);
+}
+
+.progress-settings-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 4px;
+    padding: 8px 0;
+    background: var(--bg-card);
+    border: 1px solid #555;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+    min-width: 200px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.progress-settings-dropdown.show {
+    display: block;
+}
+
+.progress-settings-dropdown .dropdown-title {
+    padding: 4px 12px 8px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    border-bottom: 1px solid #444;
+    margin-bottom: 4px;
+}
+
+.progress-settings-dropdown .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.progress-settings-dropdown .dropdown-item:hover {
+    background: var(--bg-card-hover);
+}
+
+.progress-settings-dropdown .dropdown-item input[type="checkbox"] {
+    margin: 0;
+    cursor: pointer;
+}
+
+.progress-settings-dropdown .dropdown-item img {
+    flex-shrink: 0;
+}
+
+.progress-settings-dropdown .dropdown-item span {
+    font-size: 0.85rem;
+    color: var(--text-primary);
+}
+
 #sort-select {
     padding: 0.5rem 1rem;
     background: var(--bg-card);

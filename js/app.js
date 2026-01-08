@@ -40,7 +40,7 @@ function toggleItemOwned(itemId) {
     saveOwnedItems(currentCollection, ownedItems);
     // Update collection progress (skip for Glamour)
     if (currentCollection !== 'Glamour') {
-        updateCollectionProgress(currentCollection, currentCollectionData.Items, ownedItems);
+        updateCollectionProgress(currentCollection, currentCollectionData.Items, ownedItems, filterState.excludeCategories);
     }
 }
 
@@ -155,6 +155,14 @@ async function init() {
 
     // Set up event listeners
     setupEventListeners();
+
+    // Set up progress exclude category callback
+    onProgressExcludeCategoryChange = function(category) {
+        filterState.toggleExcludeCategory(category);
+        if (currentCollection && currentCollection !== 'Glamour' && currentCollectionData) {
+            updateCollectionProgress(currentCollection, currentCollectionData.Items, ownedItems, filterState.excludeCategories);
+        }
+    };
 
     // Load data
     await loadData();
@@ -716,7 +724,7 @@ function renderItems() {
     if (currentCollection === 'Glamour') {
         document.getElementById('collection-progress').innerHTML = '';
     } else {
-        updateCollectionProgress(currentCollection, currentCollectionData.Items, ownedItems);
+        updateCollectionProgress(currentCollection, currentCollectionData.Items, ownedItems, filterState.excludeCategories);
     }
 
     // Clear grid

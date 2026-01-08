@@ -157,14 +157,14 @@ function createTabButton(collection, isActive) {
 }
 
 // Calculate and update collection progress in items header
-function updateCollectionProgress(collectionName, items, ownedSet) {
+function updateCollectionProgress(collectionName, items, ownedSet, excludeCategories) {
     const progressContainer = document.getElementById('collection-progress');
     if (!progressContainer) return;
 
-    // Filter items that have sources
-    const itemsWithSources = items.filter(item => item.Sources && item.Sources.length > 0);
-    const total = itemsWithSources.length;
-    const owned = itemsWithSources.filter(item => ownedSet.has(item.Id)).length;
+    // Filter items: must have sources and not be excluded
+    const validItems = items.filter(item => !shouldExcludeFromProgress(item, excludeCategories));
+    const total = validItems.length;
+    const owned = validItems.filter(item => ownedSet.has(item.Id)).length;
     const percentage = total > 0 ? (owned / total * 100) : 0;
 
     // Clear and rebuild with proper elements
@@ -189,10 +189,80 @@ function updateCollectionProgress(collectionName, items, ownedSet) {
     percentSpan.style.cssText = 'font-size: 0.85rem; color: #917D54; margin-left: 8px;';
     percentSpan.textContent = `${percentage.toFixed(1)}%`;
 
+    // Settings button with dropdown
+    const settingsWrapper = document.createElement('div');
+    settingsWrapper.className = 'progress-settings-wrapper';
+
+    const settingsBtn = document.createElement('button');
+    settingsBtn.className = 'progress-settings-btn';
+    settingsBtn.title = '排除分類設定';
+    settingsBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+    </svg>`;
+
+    // Create dropdown
+    const dropdown = document.createElement('div');
+    dropdown.className = 'progress-settings-dropdown';
+    dropdown.innerHTML = '<div class="dropdown-title">排除分類（不計入進度）</div>';
+
+    // Add category checkboxes
+    for (const [key, value] of Object.entries(SOURCE_CATEGORIES)) {
+        const label = document.createElement('label');
+        label.className = 'dropdown-item';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = excludeCategories && excludeCategories.has(key);
+        checkbox.dataset.category = key;
+
+        const icon = document.createElement('img');
+        icon.src = getIconUrl(value.iconId);
+        icon.alt = '';
+        icon.width = 16;
+        icon.height = 16;
+
+        const text = document.createElement('span');
+        text.textContent = value.name;
+
+        label.appendChild(checkbox);
+        label.appendChild(icon);
+        label.appendChild(text);
+        dropdown.appendChild(label);
+    }
+
+    settingsWrapper.appendChild(settingsBtn);
+    settingsWrapper.appendChild(dropdown);
+
+    // Toggle dropdown on button click
+    settingsBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle('show');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', () => {
+        dropdown.classList.remove('show');
+    });
+
+    // Handle checkbox changes
+    dropdown.addEventListener('change', (e) => {
+        if (e.target.type === 'checkbox') {
+            const category = e.target.dataset.category;
+            if (typeof onProgressExcludeCategoryChange === 'function') {
+                onProgressExcludeCategoryChange(category);
+            }
+        }
+    });
+
     progressContainer.appendChild(countSpan);
     progressContainer.appendChild(barOuter);
     progressContainer.appendChild(percentSpan);
+    progressContainer.appendChild(settingsWrapper);
 }
+
+// Callback for progress exclude category change (set by app.js)
+let onProgressExcludeCategoryChange = null;
 
 // Show Wishlist page - displays all wishlist items from all collections
 function showWishlistPage() {

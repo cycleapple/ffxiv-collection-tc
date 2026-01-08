@@ -87,6 +87,7 @@ class FilterState {
         this.searchQuery = '';
         this.showNoSource = false; // 預設隱藏無來源項目
         this.ownershipFilter = 'all'; // 'all' | 'owned' | 'not-owned'
+        this.excludeCategories = new Set(); // 進度計算排除的分類
     }
 
     toggleShowNoSource() {
@@ -101,7 +102,8 @@ class FilterState {
 
     saveSettings() {
         localStorage.setItem('ffxiv-filter-settings', JSON.stringify({
-            ownershipFilter: this.ownershipFilter
+            ownershipFilter: this.ownershipFilter,
+            excludeCategories: [...this.excludeCategories]
         }));
     }
 
@@ -111,10 +113,22 @@ class FilterState {
             try {
                 const settings = JSON.parse(data);
                 this.ownershipFilter = settings.ownershipFilter || 'all';
+                if (Array.isArray(settings.excludeCategories)) {
+                    this.excludeCategories = new Set(settings.excludeCategories);
+                }
             } catch (e) {
                 // Ignore invalid data
             }
         }
+    }
+
+    toggleExcludeCategory(category) {
+        if (this.excludeCategories.has(category)) {
+            this.excludeCategories.delete(category);
+        } else {
+            this.excludeCategories.add(category);
+        }
+        this.saveSettings();
     }
 
     toggleCategory(category) {
@@ -235,6 +249,27 @@ class FilterState {
 
         return true;
     }
+}
+
+// Check if an item should be excluded from progress calculation
+function shouldExcludeFromProgress(item, excludeCategories) {
+    // No sources = exclude
+    if (!item.Sources || item.Sources.length === 0) return true;
+    // No exclusions = include all
+    if (!excludeCategories || excludeCategories.size === 0) return false;
+
+    // Check if ALL sources belong to excluded categories
+    // If any source has a non-excluded category, include the item
+    for (const source of item.Sources) {
+        // Source has no categories = include
+        if (!source.Categories || source.Categories.length === 0) return false;
+        // Check if any category is not excluded
+        for (const cat of source.Categories) {
+            if (!excludeCategories.has(cat)) return false;
+        }
+    }
+    // All sources are in excluded categories
+    return true;
 }
 
 // Sort functions
