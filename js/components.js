@@ -633,6 +633,11 @@ function renderSourceItem(source) {
     const displayName = translateSourceName(source.Name, sourceType);
     const wikiLinkHtml = renderSourceWikiLink(source);
 
+    // Add description for achievements (shown on separate line)
+    const descriptionHtml = source.Description
+        ? `<div class="source-description">${source.Description}</div>`
+        : '';
+
     div.innerHTML = `
         <div class="source-header">
             <img src="${sourceIconUrl}" alt="" onerror="this.style.display='none'">
@@ -640,6 +645,7 @@ function renderSourceItem(source) {
             ${wikiLinkHtml}
             <span class="source-type">${getSourceTypeName(sourceType)}</span>
         </div>
+        ${descriptionHtml}
         ${detailsHtml ? `<div class="source-details">${detailsHtml}</div>` : ''}
     `;
 
