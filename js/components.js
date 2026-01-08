@@ -502,7 +502,7 @@ function getSourceWikiUrl(source) {
     if (!sourceName) return null;
 
     // Only support these source types
-    if (!['Instance', 'Achievement', 'Quest', 'Container'].includes(sourceType)) {
+    if (!['Instance', 'Achievement', 'Quest', 'Container', 'Npc'].includes(sourceType)) {
         return null;
     }
 
@@ -555,6 +555,16 @@ function getSourceWikiUrl(source) {
                 if (scName) {
                     return {
                         url: `https://ff14.huijiwiki.com/wiki/${encodeURIComponent('物品:' + scName)}`,
+                        isSearch: false
+                    };
+                }
+                break;
+            case 'Npc':
+                // NPC wiki page
+                scName = huijiMapping.sources.npcs?.[cleanName];
+                if (scName) {
+                    return {
+                        url: `https://ff14.huijiwiki.com/wiki/${encodeURIComponent(scName)}`,
                         isSearch: false
                     };
                 }
