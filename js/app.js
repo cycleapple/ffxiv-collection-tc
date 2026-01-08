@@ -709,8 +709,8 @@ function renderItems() {
     // Reset pagination
     currentRenderedCount = 0;
 
-    // Update count
-    elements.itemsCount.textContent = `顯示 0 / ${currentFilteredItems.length} 項（共 ${currentCollectionData.Items.length} 項）`;
+    // Update items count (simple total)
+    elements.itemsCount.textContent = `共 ${currentFilteredItems.length} 項`;
 
     // Update collection progress (skip for Glamour)
     if (currentCollection === 'Glamour') {
@@ -751,9 +751,6 @@ function renderMoreItems() {
     elements.itemsGrid.appendChild(fragment);
 
     currentRenderedCount = endIndex;
-
-    // Update count display (use cached currentCollectionData)
-    elements.itemsCount.textContent = `顯示 ${currentRenderedCount} / ${currentFilteredItems.length} 項（共 ${currentCollectionData.Items.length} 項）`;
 
     // Show/hide load more button
     if (currentRenderedCount < currentFilteredItems.length) {
