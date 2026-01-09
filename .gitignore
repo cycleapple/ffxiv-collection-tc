@@ -4,3 +4,4 @@ data/*_cn.csv
 data/*_tc.csv
 data/tc_*_mapping.json
 data/cn_*_mapping.json
+CLAUDE.md
