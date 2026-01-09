@@ -99,12 +99,19 @@ function createItemCard(item, index) {
     // Check if this is a Blue Mage spell and get spell number
     const blueMageSpell = (currentCollection === 'Blue Mage' && blueMageSources) ? blueMageSources[item.Id] : null;
 
-    // Display number for Blue Mage spells or Triple Triad cards
+    // Display number for Blue Mage spells, Triple Triad cards, or Orchestrions
     let itemNumberHtml = '';
     if (blueMageSpell) {
         itemNumberHtml = `<div class="item-spell-no">No.${blueMageSpell.no}</div>`;
     } else if (currentCollection === 'Triple Triad' && item.CardNumberDisplay) {
         itemNumberHtml = `<div class="item-spell-no">${item.CardNumberDisplay}</div>`;
+    } else if (currentCollection === 'Orchestrions' && item.Category) {
+        if (item.CategoryOrder !== undefined && item.CategoryOrder < 65535) {
+            const orderStr = String(item.CategoryOrder).padStart(3, '0');
+            itemNumberHtml = `<div class="item-spell-no">${item.Category} <span class="category-order">${orderStr}</span></div>`;
+        } else {
+            itemNumberHtml = `<div class="item-spell-no">${item.Category}</div>`;
+        }
     }
 
     card.innerHTML = `

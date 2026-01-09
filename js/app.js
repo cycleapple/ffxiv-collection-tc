@@ -204,6 +204,7 @@ function cacheElements() {
     elements.modalWikiLink = document.getElementById('modal-wiki-link');
     elements.modalOwnedBtn = document.getElementById('modal-owned-btn');
     elements.modalWishlistBtn = document.getElementById('modal-wishlist-btn');
+    elements.modalOrchestrionCategory = document.getElementById('modal-orchestrion-category');
     elements.loadingIndicator = document.getElementById('loading-indicator');
 
     // Settings modal elements
@@ -710,6 +711,8 @@ function renderItems() {
         sortKey = 'spell-no';
     } else if (currentCollection === 'Triple Triad' && currentSort === 'name') {
         sortKey = 'card-no';
+    } else if (currentCollection === 'Orchestrions' && currentSort === 'name') {
+        sortKey = 'orchestrion-category';
     }
     const sortFn = SORT_FUNCTIONS[sortKey] || SORT_FUNCTIONS['name'];
     currentFilteredItems.sort(sortFn);
@@ -916,6 +919,19 @@ function showItemDetail(item) {
 
     const patchDisplay = item.DisplayPatch || (item.PatchAdded >= 999 ? '未知' : item.PatchAdded.toString());
     elements.modalPatch.textContent = `Patch ${patchDisplay}`;
+
+    // Show orchestrion category for Orchestrions
+    if (currentCollection === 'Orchestrions' && item.Category) {
+        if (item.CategoryOrder !== undefined && item.CategoryOrder < 65535) {
+            const orderStr = String(item.CategoryOrder).padStart(3, '0');
+            elements.modalOrchestrionCategory.innerHTML = `${item.Category} <span style="opacity:0.7">${orderStr}</span>`;
+        } else {
+            elements.modalOrchestrionCategory.textContent = item.Category;
+        }
+        elements.modalOrchestrionCategory.style.display = '';
+    } else {
+        elements.modalOrchestrionCategory.style.display = 'none';
+    }
 
     // Clean FFXIV formatting tags and convert <br> to newlines
     let description = (item.Description || '').replace(/<br\s*\/?>/gi, '\n');

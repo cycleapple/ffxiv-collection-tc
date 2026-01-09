@@ -272,6 +272,22 @@ function shouldExcludeFromProgress(item, excludeCategories) {
     return true;
 }
 
+// Orchestrion category order (from OrchestrionCategory.csv Order column)
+const ORCHESTRION_CATEGORY_ORDER = {
+    '區域場景1': 1,
+    '區域場景2': 2,
+    '迷宮挑戰': 11,
+    '迷宮挑戰2': 12,
+    '討伐殲滅戰': 21,
+    '大型任務1': 31,
+    '大型任務2': 32,
+    '環境音': 41,
+    '任務相關': 51,
+    '其他': 52,
+    '季節活動': 61,
+    '商城與特典': 71
+};
+
 // Sort functions
 const SORT_FUNCTIONS = {
     'name': (a, b) => (a.Name || '').localeCompare(b.Name || '', 'zh-TW'),
@@ -290,6 +306,15 @@ const SORT_FUNCTIONS = {
         const noA = a.CardNumber ?? 9999;
         const noB = b.CardNumber ?? 9999;
         return noA - noB;
+    },
+    'orchestrion-category': (a, b) => {
+        // Sort by orchestrion category then order number
+        const catOrderA = ORCHESTRION_CATEGORY_ORDER[a.Category] ?? 999;
+        const catOrderB = ORCHESTRION_CATEGORY_ORDER[b.Category] ?? 999;
+        if (catOrderA !== catOrderB) return catOrderA - catOrderB;
+        const orderA = a.CategoryOrder ?? 99999;
+        const orderB = b.CategoryOrder ?? 99999;
+        return orderA - orderB;
     }
 };
 
