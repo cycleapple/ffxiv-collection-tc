@@ -609,30 +609,11 @@ function renderUI() {
     showHomepage();
 }
 
-// Render source category filters (only show categories that exist in current collection)
+// Render source category filters
 function renderSourceFilters() {
     elements.sourceFilters.innerHTML = '';
 
-    // Get categories that exist in current collection
-    const existingCategories = new Set();
-    if (currentCollectionData && currentCollectionData.Items) {
-        for (const item of currentCollectionData.Items) {
-            if (item.Sources) {
-                for (const source of item.Sources) {
-                    if (source.Categories) {
-                        for (const cat of source.Categories) {
-                            existingCategories.add(cat);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     for (const [key, info] of Object.entries(SOURCE_CATEGORIES)) {
-        // Only show categories that exist in current collection
-        if (!existingCategories.has(key)) continue;
-
         const isActive = filterState.activeCategories.has(key);
         const filterItem = createSourceFilterItem(key, info, isActive);
         elements.sourceFilters.appendChild(filterItem);
