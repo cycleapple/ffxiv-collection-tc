@@ -609,11 +609,60 @@ function renderUI() {
     showHomepage();
 }
 
-// Render source category filters
+// Render source category filters (only show categories that exist in current collection)
 function renderSourceFilters() {
     elements.sourceFilters.innerHTML = '';
 
+    // If no collection loaded yet (homepage), show all categories
+    if (!currentCollectionData) {
+        for (const [key, info] of Object.entries(SOURCE_CATEGORIES)) {
+            const isActive = filterState.activeCategories.has(key);
+            const filterItem = createSourceFilterItem(key, info, isActive);
+            elements.sourceFilters.appendChild(filterItem);
+        }
+        return;
+    }
+
+    // Get categories that exist in current collection
+    const existingCategories = new Set();
+
+    // Special handling for Blue Mage - use blueMageSources
+    if (currentCollection === 'Blue Mage' && blueMageSources) {
+        for (const item of currentCollectionData.Items) {
+            const spell = blueMageSources[item.Id];
+            if (spell && spell.method) {
+                for (const method of spell.method) {
+                    const category = BLUEMAGE_TYPE_MAP[method.type];
+                    if (category) existingCategories.add(category);
+                }
+            }
+        }
+    } else {
+        // Normal collection - check Sources
+        for (const item of currentCollectionData.Items) {
+            if (item.Sources) {
+                for (const source of item.Sources) {
+                    if (source.Categories) {
+                        for (const cat of source.Categories) {
+                            if (cat) existingCategories.add(cat);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Remove active categories that don't exist in current collection
+    for (const cat of filterState.activeCategories) {
+        if (!existingCategories.has(cat)) {
+            filterState.activeCategories.delete(cat);
+        }
+    }
+
+    // Only show categories that exist
     for (const [key, info] of Object.entries(SOURCE_CATEGORIES)) {
+        if (!existingCategories.has(key)) continue;
+
         const isActive = filterState.activeCategories.has(key);
         const filterItem = createSourceFilterItem(key, info, isActive);
         elements.sourceFilters.appendChild(filterItem);
@@ -701,6 +750,9 @@ function renderItems() {
 
     currentCollectionData = collectionsData.Collections.find(c => c.CollectionName === currentCollection);
     if (!currentCollectionData) return;
+
+    // Update source filters for current collection
+    renderSourceFilters();
 
     // Filter items
     currentFilteredItems = currentCollectionData.Items.filter(item => filterState.passesFilters(item, isItemOwned));

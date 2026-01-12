@@ -731,7 +731,7 @@ const BLUEMAGE_SOURCE_TYPES = {
     'dungeon': { name: '副本', icon: 60414 },
     'trail': { name: '討伐', icon: 61804 },
     'raid': { name: '大型任務', icon: 61802 },
-    'map': { name: '野外', icon: 60501 },
+    'mob': { name: '野外', icon: 60501 },
     'fate': { name: 'FATE', icon: 60722 },
     'special': { name: '特殊', icon: 61419 },
     'masked': { name: '假面狂歡', icon: 61824 }
@@ -751,7 +751,7 @@ function renderBlueMageSource(method) {
     // Handle different method types
     if (method.type === 'special') {
         locationText = method.text || '特殊方式習得';
-    } else if (method.type === 'map') {
+    } else if (method.type === 'mob') {
         locationText = method.map || '';
         if (method.rank) {
             locationText += ` (${method.rank}級狩獵怪)`;

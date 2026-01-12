@@ -25,7 +25,20 @@ const SOURCE_CATEGORIES = {
     Crafting: { name: '製作', iconId: 62202 },
     Voyages: { name: '遠航探索', iconId: 65035 },
     Venture: { name: '雇員探索', iconId: 65049 },
-    FirmamentFete: { name: '蒼天街', iconId: 65073 }
+    FirmamentFete: { name: '蒼天街', iconId: 65073 },
+    FATE: { name: 'FATE', iconId: 60722 },
+    Mob: { name: '野怪', iconId: 60004 },
+    Special: { name: '特殊', iconId: 60073 }
+};
+
+// Blue Mage method type to filter category mapping
+const BLUEMAGE_TYPE_MAP = {
+    'dungeon': 'Duty',
+    'trail': 'Duty',      // trial (typo in data)
+    'raid': 'Duty',
+    'fate': 'FATE',
+    'mob': 'Mob',
+    'special': 'Special'
 };
 
 // Major patch versions for filtering with expansion icons
@@ -182,8 +195,18 @@ class FilterState {
         }
 
         // No source filter - hide items without sources by default
-        if (!this.showNoSource && (!item.Sources || item.Sources.length === 0)) {
-            return false;
+        // Special handling for Blue Mage - they have sources in blueMageSources
+        if (!this.showNoSource) {
+            const hasRegularSources = item.Sources && item.Sources.length > 0;
+            const hasBlueMageSources = typeof currentCollection !== 'undefined' &&
+                currentCollection === 'Blue Mage' &&
+                typeof blueMageSources !== 'undefined' &&
+                blueMageSources &&
+                blueMageSources[item.Id]?.method?.length > 0;
+
+            if (!hasRegularSources && !hasBlueMageSources) {
+                return false;
+            }
         }
 
         // Search filter
@@ -215,31 +238,48 @@ class FilterState {
 
         // Source category filter
         if (this.activeCategories.size > 0) {
-            if (!item.Sources || item.Sources.length === 0) {
-                return false;
-            }
-
             let categoryMatch = false;
-            for (const source of item.Sources) {
-                // Check explicit categories
-                if (source.Categories) {
-                    for (const cat of source.Categories) {
-                        if (this.activeCategories.has(cat)) {
+
+            // Special handling for Blue Mage - check blueMageSources
+            if (typeof currentCollection !== 'undefined' && currentCollection === 'Blue Mage' &&
+                typeof blueMageSources !== 'undefined' && blueMageSources) {
+                const spell = blueMageSources[item.Id];
+                if (spell && spell.method) {
+                    for (const method of spell.method) {
+                        const category = BLUEMAGE_TYPE_MAP[method.type];
+                        if (category && this.activeCategories.has(category)) {
                             categoryMatch = true;
                             break;
                         }
                     }
                 }
-                // Check for Achievement Certificate in costs (special case - not in Categories)
-                if (!categoryMatch && this.activeCategories.has('AchievementCertificate') && source.Costs) {
-                    for (const cost of source.Costs) {
-                        if (cost.ItemName === '成就幣') {
-                            categoryMatch = true;
-                            break;
+            } else {
+                // Normal collection - check Sources
+                if (!item.Sources || item.Sources.length === 0) {
+                    return false;
+                }
+
+                for (const source of item.Sources) {
+                    // Check explicit categories
+                    if (source.Categories) {
+                        for (const cat of source.Categories) {
+                            if (this.activeCategories.has(cat)) {
+                                categoryMatch = true;
+                                break;
+                            }
                         }
                     }
+                    // Check for Achievement Certificate in costs (special case - not in Categories)
+                    if (!categoryMatch && this.activeCategories.has('AchievementCertificate') && source.Costs) {
+                        for (const cost of source.Costs) {
+                            if (cost.ItemName === '成就幣') {
+                                categoryMatch = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (categoryMatch) break;
                 }
-                if (categoryMatch) break;
             }
 
             if (!categoryMatch) {
