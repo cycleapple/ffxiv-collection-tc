@@ -28,7 +28,8 @@ const SOURCE_CATEGORIES = {
     FirmamentFete: { name: '蒼天街', iconId: 65073 },
     FATE: { name: 'FATE', iconId: 60722 },
     Mob: { name: '野怪', iconId: 60004 },
-    Special: { name: '特殊', iconId: 60073 }
+    Special: { name: '特殊', iconId: 60073 },
+    Npc: { name: 'NPC', iconId: 61104 }
 };
 
 // Blue Mage method type to filter category mapping
