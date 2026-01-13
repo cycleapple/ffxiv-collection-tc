@@ -1080,9 +1080,8 @@ function showItemDetail(item) {
         const groundContainer = document.getElementById('mount-ground-container');
         const flyingContainer = document.getElementById('mount-flying-container');
 
-        const encodedName = encodeURIComponent(item.Name);
-        const groundSrc = `images/mounts/${encodedName}_地面.png`;
-        const flyingSrc = `images/mounts/${encodedName}_飛行.png`;
+        const groundSrc = `images/mounts/${encodeURIComponent(item.Name + '_地面')}.png`;
+        const flyingSrc = `images/mounts/${encodeURIComponent(item.Name + '_飛行')}.png`;
 
         groundContainer.style.display = '';
         flyingContainer.style.display = '';
