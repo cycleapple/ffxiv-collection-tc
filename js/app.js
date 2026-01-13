@@ -1072,6 +1072,35 @@ function showItemDetail(item) {
         framePreviewsEl.style.display = 'none';
     }
 
+    // Render mount screenshots
+    const mountScreenshotsEl = document.getElementById('mount-screenshots');
+    if (currentCollection === 'Mounts' && mountScreenshotsEl) {
+        const groundImg = document.getElementById('mount-ground-img');
+        const flyingImg = document.getElementById('mount-flying-img');
+        const groundContainer = document.getElementById('mount-ground-container');
+        const flyingContainer = document.getElementById('mount-flying-container');
+
+        const encodedName = encodeURIComponent(item.Name);
+        const groundSrc = `images/mounts/${encodedName}_地面.png`;
+        const flyingSrc = `images/mounts/${encodedName}_飛行.png`;
+
+        groundContainer.style.display = '';
+        flyingContainer.style.display = '';
+
+        groundImg.src = groundSrc;
+        groundImg.onerror = function() { groundContainer.style.display = 'none'; };
+        groundImg.onclick = function() { openLightbox(this.src, item.Name + ' (地面)'); };
+
+        flyingImg.src = flyingSrc;
+        flyingImg.onerror = function() { flyingContainer.style.display = 'none'; };
+        flyingImg.onclick = function() { openLightbox(this.src, item.Name + ' (飛行)'); };
+
+        mountScreenshotsEl.style.display = '';
+    } else if (mountScreenshotsEl) {
+        mountScreenshotsEl.style.display = 'none';
+    }
+
+
     // Set owned button state
     elements.modalOwnedBtn.dataset.itemId = item.Id;
     updateModalOwnedState(item.Id);

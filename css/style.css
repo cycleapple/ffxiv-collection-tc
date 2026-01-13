@@ -817,6 +817,62 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
+/* Mount Screenshots */
+.mount-screenshots {
+    margin-bottom: 1.5rem;
+}
+
+.mount-screenshots h3 {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+}
+
+.mount-images {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.mount-image-container {
+    flex: 1;
+    min-width: 200px;
+    max-width: 400px;
+    text-align: center;
+}
+
+.mount-image-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #2a2a2a;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.mount-image-container img:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.mount-image-container span {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 480px) {
+    .mount-images {
+        flex-direction: column;
+    }
+
+    .mount-image-container {
+        max-width: 100%;
+    }
+}
+
 /* Image Lightbox */
 .lightbox {
     display: none;
