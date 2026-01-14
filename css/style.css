@@ -738,6 +738,30 @@ body {
     flex-shrink: 0;
 }
 
+.copy-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 10px;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.copy-link-btn:hover {
+    background: var(--bg-secondary);
+}
+
+.copy-link-btn.copied {
+    background: var(--success-color, #4caf50);
+    color: white;
+    border-color: var(--success-color, #4caf50);
+}
+
 .item-description {
     color: var(--text-secondary);
     font-size: 0.9rem;

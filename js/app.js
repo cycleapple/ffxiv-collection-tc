@@ -206,7 +206,8 @@ const elements = {
     exportStats: null,
     exportTextarea: null,
     importTextarea: null,
-    importBtn: null
+    importBtn: null,
+    modalCopyLinkBtn: null
 };
 
 // Initialize the application
@@ -286,6 +287,7 @@ function cacheElements() {
     elements.exportTextarea = document.getElementById('export-textarea');
     elements.importTextarea = document.getElementById('import-textarea');
     elements.importBtn = document.getElementById('import-btn');
+    elements.modalCopyLinkBtn = document.getElementById('modal-copy-link-btn');
 
     // Create load more container dynamically
     createLoadMoreButton();
@@ -500,6 +502,21 @@ function setupEventListeners() {
                 updateCardWishlistState(cardToggle, itemId);
             }
         }
+    });
+
+    // Modal copy link button click
+    elements.modalCopyLinkBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+            const btn = elements.modalCopyLinkBtn;
+            const span = btn.querySelector('span');
+            const originalText = span.textContent;
+            btn.classList.add('copied');
+            span.textContent = '已複製！';
+            setTimeout(() => {
+                btn.classList.remove('copied');
+                span.textContent = originalText;
+            }, 2000);
+        });
     });
 
     // Escape key to close modal
