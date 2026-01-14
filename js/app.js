@@ -9,6 +9,47 @@ function trackEvent(eventName, params = {}) {
     }
 }
 
+// URL 分享功能
+function updateUrlWithItem(collectionName, itemName) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('collection', collectionName);
+    url.searchParams.set('item', itemName);
+    history.replaceState(null, '', url.toString());
+}
+
+function clearUrlParams() {
+    const url = new URL(window.location.href);
+    url.searchParams.delete('collection');
+    url.searchParams.delete('item');
+    history.replaceState(null, '', url.toString());
+}
+
+function findItemByName(itemName, collectionName) {
+    if (!collectionsData) return null;
+    const collection = collectionsData.Collections.find(c => c.CollectionName === collectionName);
+    if (!collection) return null;
+    return collection.Items.find(item => item.Name === itemName);
+}
+
+function checkUrlAndOpenItem() {
+    const url = new URL(window.location.href);
+    const collectionName = url.searchParams.get('collection');
+    const itemName = url.searchParams.get('item');
+
+    if (collectionName && itemName) {
+        // 切換到指定收藏分類
+        switchCollection(collectionName);
+
+        // 延遲等資料載入後開啟項目
+        setTimeout(() => {
+            const item = findItemByName(itemName, collectionName);
+            if (item) {
+                showItemDetail(item);
+            }
+        }, 100);
+    }
+}
+
 // Global state
 let collectionsData = null;
 let blueMageSources = null; // Blue Mage spell sources from thewakingsands
@@ -198,6 +239,9 @@ async function init() {
 
     // Update ownership filter UI to match loaded settings
     updateOwnershipFilterUI();
+
+    // 檢查 URL 參數，自動開啟指定項目
+    checkUrlAndOpenItem();
 }
 
 // Update ownership filter radio buttons to match current state
@@ -997,6 +1041,9 @@ function showItemDetail(item) {
         collection: currentCollection
     });
 
+    // 更新 URL 以支援分享
+    updateUrlWithItem(currentCollection, item.Name);
+
     elements.modalIcon.src = item.IconUrl;
     elements.modalIcon.onerror = function() {
         this.src = 'https://xivapi.com/i/000000/000000.png';
@@ -1159,6 +1206,8 @@ function showItemDetail(item) {
 function closeModal() {
     elements.modal.classList.remove('active');
     document.body.style.overflow = '';
+    // 清除 URL 參數
+    clearUrlParams();
 }
 
 // Settings modal functions
