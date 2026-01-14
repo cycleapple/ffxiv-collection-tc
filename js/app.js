@@ -2,6 +2,13 @@
  * Main application logic for Collections website
  */
 
+// Google Analytics 事件追蹤
+function trackEvent(eventName, params = {}) {
+    if (typeof gtag === 'function') {
+        gtag('event', eventName, params);
+    }
+}
+
 // Global state
 let collectionsData = null;
 let blueMageSources = null; // Blue Mage spell sources from thewakingsands
@@ -32,10 +39,20 @@ function isItemOwned(itemId) {
 
 // Toggle item owned status
 function toggleItemOwned(itemId) {
-    if (ownedItems.has(itemId)) {
+    const wasOwned = ownedItems.has(itemId);
+    if (wasOwned) {
         ownedItems.delete(itemId);
     } else {
         ownedItems.add(itemId);
+        // 追蹤標記擁有
+        const item = findItemById(itemId, currentCollection);
+        if (item) {
+            trackEvent('mark_owned', {
+                item_name: item.Name,
+                item_id: itemId,
+                collection: currentCollection
+            });
+        }
     }
     saveOwnedItems(currentCollection, ownedItems);
     // Update collection progress (skip for Glamour)
@@ -57,6 +74,15 @@ function toggleItemWishlist(collectionName, itemId) {
         wishlist.delete(key);
     } else {
         wishlist.add(key);
+        // 追蹤加入願望清單
+        const item = findItemById(itemId, collectionName);
+        if (item) {
+            trackEvent('add_to_wishlist', {
+                item_name: item.Name,
+                item_id: itemId,
+                collection: collectionName
+            });
+        }
     }
     saveWishlist(wishlist);
 }
@@ -704,6 +730,11 @@ function updateFilterUI() {
 function switchCollection(collectionName) {
     if (currentCollection === collectionName) return;
 
+    // 追蹤分類切換
+    trackEvent('select_collection', {
+        collection: collectionName
+    });
+
     // Handle Homepage specially
     if (collectionName === 'homepage') {
         currentCollection = 'homepage';
@@ -910,6 +941,11 @@ function setupInfiniteScroll() {
 function performSearch(query) {
     if (!collectionsData) return;
 
+    // 追蹤搜尋
+    trackEvent('search', {
+        search_term: query
+    });
+
     const searchLower = query.toLowerCase();
     const results = [];
 
@@ -954,6 +990,13 @@ function findItemById(itemId, collectionName) {
 
 // Show item detail modal
 function showItemDetail(item) {
+    // 追蹤項目點擊
+    trackEvent('view_item', {
+        item_name: item.Name,
+        item_id: item.Id,
+        collection: currentCollection
+    });
+
     elements.modalIcon.src = item.IconUrl;
     elements.modalIcon.onerror = function() {
         this.src = 'https://xivapi.com/i/000000/000000.png';
