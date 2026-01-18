@@ -415,6 +415,9 @@ function showHomepage() {
                 資料來自 <a href="https://ffxivcollect.com" target="_blank" rel="noopener">FFXIV Collect</a>，並翻譯為繁體中文顯示。
             </p>
             <div class="homepage-links">
+                <a href="https://cycleapple.github.io/xiv-tc-toolbox/" target="_blank" rel="noopener">
+                    更多工具
+                </a>
                 <a href="https://discord.gg/X556xjySDG" target="_blank" rel="noopener">
                     加入 Discord 社群
                 </a>
