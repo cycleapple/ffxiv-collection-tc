@@ -629,8 +629,8 @@ function renderSourceItem(source) {
 
     const sourceType = source.Type || '';
 
-    // Special handling for Shop sources - show cost items prominently like the plugin
-    if (sourceType === 'Shop' && source.Costs && source.Costs.length > 0) {
+    // Special handling for Shop/Gil sources - show cost items prominently like the plugin
+    if ((sourceType === 'Shop' || sourceType === 'Gil') && source.Costs && source.Costs.length > 0) {
         return renderShopSource(source);
     }
 
@@ -710,6 +710,7 @@ function renderShopSource(source) {
 function getSourceTypeName(type) {
     const typeNames = {
         'Shop': '商店',
+        'Gil': '金幣',
         'Instance': '副本',
         'Quest': '任務',
         'Achievement': '成就',
