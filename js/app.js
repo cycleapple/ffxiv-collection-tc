@@ -192,6 +192,7 @@ const elements = {
     modalDescription: null,
     modalSources: null,
     modalWikiLink: null,
+    modalItemSearchLink: null,
     modalOwnedBtn: null,
     modalWishlistBtn: null,
     loadingIndicator: null,
@@ -273,6 +274,7 @@ function cacheElements() {
     elements.modalDescription = document.getElementById('modal-description');
     elements.modalSources = document.getElementById('modal-sources');
     elements.modalWikiLink = document.getElementById('modal-wiki-link');
+    elements.modalItemSearchLink = document.getElementById('modal-item-search-link');
     elements.modalOwnedBtn = document.getElementById('modal-owned-btn');
     elements.modalWishlistBtn = document.getElementById('modal-wishlist-btn');
     elements.modalOrchestrionCategory = document.getElementById('modal-orchestrion-category');
@@ -1122,6 +1124,14 @@ function showItemDetail(item) {
         elements.modalWikiLink.style.display = '';
     } else if (elements.modalWikiLink) {
         elements.modalWikiLink.style.display = 'none';
+    }
+
+    // Set item search link (search by item name)
+    if (item.Name && elements.modalItemSearchLink) {
+        elements.modalItemSearchLink.href = `https://cycleapple.github.io/ffxiv-item-search-tc/?q=${encodeURIComponent(item.Name)}`;
+        elements.modalItemSearchLink.style.display = '';
+    } else if (elements.modalItemSearchLink) {
+        elements.modalItemSearchLink.style.display = 'none';
     }
 
     // Render hairstyle race previews
