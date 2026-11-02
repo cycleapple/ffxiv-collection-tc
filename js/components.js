@@ -421,7 +421,7 @@ function showHomepage() {
                 <a href="https://discord.gg/X556xjySDG" target="_blank" rel="noopener">
                     加入 Discord 社群
                 </a>
-                <a href="https://p.ecpay.com.tw/5630EBB" target="_blank" rel="noopener">
+                <a href="https://portaly.cc/thecy" target="_blank" rel="noopener">
                     ☕ 支持作者
                 </a>
             </div>
